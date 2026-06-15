@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+<!-- Indica que esta plantilla hereda de base.html, reutilizando su estructura general -->
+
+{% block content %}
+<!-- Inicia el bloque "content", que reemplaza el bloque definido en base.html -->
+
+<div class="p-5 mb-4 bg-light rounded-3">
+    <!-- Contenedor principal con estilos de Bootstrap:
+         p-5 = padding grande
+         mb-4 = margen inferior
+         bg-light = fondo claro
+         rounded-3 = bordes redondeados -->
+
+    <div class="container-fluid py-5">
+        <!-- Contenedor fluido con padding vertical -->
+
+        <h1 class="display-5 fw-bold">
+            Plataforma de Gestión de Formación
+        </h1>
+        <!-- Título principal con estilo grande y negrita -->
+
+        <p class="fs-4">
+            Sistema desarrollado con Django,
+            PostgreSQL y Bootstrap.
+        </p>
+        <!-- Texto descriptivo con tamaño de fuente grande -->
+
+        {% if user.is_authenticated %}
+            <!-- Comprueba si el usuario ha iniciado sesión -->
+
+            <div class="alert alert-success">
+                <!-- Caja verde de Bootstrap para mensajes de éxito -->
+
+                Bienvenido
+                {{ user.first_name }}
+                <!-- Muestra el nombre del usuario logueado -->
+            </div>
+
+        {% else %}
+            <!-- Si el usuario NO está autenticado -->
+
+            <a
+                href="{% url 'registro' %}"
+                class="btn btn-primary btn-lg">
+                Registrarse
+            </a>
+            <!-- Botón que lleva al formulario de registro -->
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}
+<!-- Fin del bloque content -->

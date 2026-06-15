@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+<!-- Hereda toda la estructura de base.html.
+Esto evita repetir código (navbar, Bootstrap, estructura HTML general, etc.). -->
+
+{% load django_bootstrap5 %}
+<!-- Carga la librería django_bootstrap5.
+Permite usar etiquetas como bootstrap_form para aplicar estilos automáticamente a los formularios. -->
+
+{% block title %}
+Login
+{% endblock %}
+<!-- Define el título de la página.
+Este texto aparece en la pestaña del navegador. -->
+
+{% block content %}
+<!-- Inicio del bloque donde se coloca el contenido principal de la página.
+Este bloque reemplaza el bloque content definido en base.html -->
+
+<h2>
+Iniciar Sesión
+</h2>
+<!-- Título visible en la página.
+Simplemente informa al usuario de que está en la pantalla de login -->
+
+<form method="post">
+    <!-- Formulario HTML.
+    method="post" significa que los datos se envían al servidor de forma segura (no aparecen en la URL) -->
+
+    {% csrf_token %}
+    <!-- Token de seguridad obligatorio en Django.
+    Evita ataques CSRF (peticiones falsas desde otros sitios web) -->
+
+    {% bootstrap_form form %}
+    <!-- Renderiza automáticamente el formulario que llega desde la vista.
+    Además le aplica estilos de Bootstrap para que se vea bonito sin escribir HTML manual -->
+
+    <button
+        type="submit"
+        class="btn btn-success">
+        <!-- Botón que envía el formulario al servidor.
+        type="submit" indica que al pulsarlo se ejecuta el envío del form.
+        btn btn-success aplica estilo verde (Bootstrap) -->
+
+        Entrar
+    </button>
+</form>
+
+{% endblock %}
+<!-- Fin del bloque content.
+Todo lo que esté aquí sustituye al bloque content del template base -->

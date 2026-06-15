@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+<!-- Indica que esta plantilla hereda de base.html, reutilizando su estructura (navbar, Bootstrap, etc.) -->
+
+{% load django_bootstrap5 %}
+<!-- Carga las etiquetas de django_bootstrap5 para poder usar bootstrap_form y estilos de Bootstrap -->
+
+{% block title %}
+Registro
+{% endblock %}
+<!-- Define el título de la página (aparece en la pestaña del navegador) -->
+
+{% block content %}
+<!-- Bloque donde se coloca el contenido principal de la página -->
+
+<h2>
+Registro de Alumno
+</h2>
+<!-- Título visible dentro de la página -->
+
+<form method="post">
+    <!-- Formulario HTML que envía datos al servidor usando método POST -->
+
+    {% csrf_token %}
+    <!-- Token de seguridad obligatorio en Django para evitar ataques CSRF -->
+
+    {% bootstrap_form form %}
+    <!-- Renderiza automáticamente el formulario usando estilos de Bootstrap -->
+
+    <button
+        type="submit"
+        class="btn btn-primary">
+        <!-- Botón que envía el formulario -->
+        <!-- class="btn btn-primary" aplica estilo azul de Bootstrap -->
+
+        Registrarse
+    </button>
+</form>
+
+{% endblock %}
+<!-- Fin del bloque de contenido -->

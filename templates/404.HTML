@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{# Indica que esta plantilla hereda de base.html, reutilizando la estructura general del sitio (cabecera, footer, estilos, etc.) #}
+
+{% block content %}
+{# Inicio del bloque de contenido principal que se insertará dentro de base.html #}
+
+<div class="text-center">
+    {# Contenedor centrado horizontalmente usando Bootstrap #}
+
+    <h1>
+        404
+    </h1>
+    {# Título grande que indica el error HTTP 404 (página no encontrada) #}
+
+    <p>
+        La página solicitada no existe.
+    </p>
+    {# Mensaje explicativo para el usuario indicando que la ruta no está disponible #}
+
+</div>
+{# Fin del contenedor centrado #}
+
+{% endblock %}
+{# Fin del bloque de contenido #}
