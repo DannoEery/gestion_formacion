@@ -29,79 +29,48 @@
     <!-- Inicio del contenido visible de la página -->
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <!-- Barra de navegación principal de Bootstrap, estilo oscuro -->
-
         <div class="container">
-            <!-- Contenedor centrado para alinear el contenido de la navbar -->
-
             <a class="navbar-brand" href="{% url 'inicio' %}">
                 Gestión Formación
             </a>
-            <!-- Logo o nombre de la aplicación.
-     El enlace lleva a la vista con nombre 'inicio' -->
-
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
-                <!-- Botón que aparece en pantallas pequeñas para desplegar el menú -->
-
                 <span class="navbar-toggler-icon">
                 </span>
-                <!-- Icono del botón hamburguesa -->
             </button>
-
             <div class="collapse navbar-collapse" id="menu">
-                <!-- Contenedor del menú que se colapsa en dispositivos pequeños -->
 
                 <ul class="navbar-nav me-auto">
-                    <!-- Lista de enlaces de navegación alineados a la izquierda -->
-
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'inicio' %}">
                             Inicio
                         </a>
                     </li>
-                    <!-- Enlace a la página de inicio -->
-
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'lista_cursos' %}">
                             Cursos
                         </a>
                     </li>
-                    <!-- Enlace a la lista de cursos -->
-
                 </ul>
-
                 <div>
-                    <!-- Contenedor de la parte derecha de la navbar (usuario / sesión) -->
-
                     {% if user.is_authenticated %}
-                    <!-- Condición: si el usuario está logueado -->
-
                     <span class="text-white me-3">
                         {{ user.username }}
                     </span>
-                    <!-- Muestra el nombre del usuario conectado -->
-
-                    <a href="{% url 'logout' %}" class="btn btn-danger">
-                        Salir
-                    </a>
-                    <!-- Botón para cerrar sesión -->
-
+                    <form method="post" action="{% url 'logout' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            Salir
+                        </button>
+                    </form>
                     {% else %}
-                    <!-- Si el usuario NO está autenticado -->
-
                     <a href="{% url 'registro' %}" class="btn btn-success me-2">
                         Registro
                     </a>
-                    <!-- Botón para registrarse -->
-
                     <a href="{% url 'login' %}" class="btn btn-primary">
                         Login
                     </a>
-                    <!-- Botón para iniciar sesión -->
-
                     {% endif %}
                 </div>
-
             </div>
         </div>
     </nav>
