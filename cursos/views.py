@@ -25,25 +25,24 @@ def lista_cursos(request):
 )
 
 
-def detalle_curso(
-    request,
-    curso_id
-):
-    # Vista que muestra el detalle de un curso concreto
+def detalle_curso(request,id):
 
     curso = get_object_or_404(
         Curso,
-        pk=curso_id,
-        activo=True
+        id=id
     )
-    # Busca el curso por su ID (pk)
-    # Si no existe o no está activo, devuelve error 404
+
+    # ==========================
+    # PLAZAS OCUPADAS
+    # ==========================
+
+    ocupadas = curso.matriculas.count()
 
     return render(
         request,
-        'cursos/detalle_curso.html',
+        "cursos/detalle_curso.html",
         {
-            'curso': curso
-            # Envía el curso encontrado a la plantilla
+            "curso":curso,
+            "ocupadas":ocupadas
         }
     )
