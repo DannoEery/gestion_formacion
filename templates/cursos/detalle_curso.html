@@ -63,6 +63,21 @@
         </p>
         {# Muestra la descripción completa del curso #}
 
+        <hr>
+        {# Separador visual para aislar las opciones de acción de la descripción #}
+        
+        {% if user.is_authenticated %}
+            {# Si el usuario ha iniciado sesión, renderiza el botón de acción directa #}
+            <a href="{% url 'matricularse' curso.id %}" class="btn btn-success">
+                Matricularme
+            </a>
+        {% else %}
+            {# Si es un visitante anónimo, muestra un aviso de Bootstrap en color azul informativo #}
+            <div class="alert alert-info">
+                Debes iniciar sesión para matricularte.
+            </div>
+        {% endif %}
+
     </div>
 </div>
 
