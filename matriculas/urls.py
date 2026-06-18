@@ -1,5 +1,9 @@
 from django.urls import path
 from .views import matricularse
+from .views import (
+matricularse,
+mis_cursos
+)
 
 # Lista que define los patrones de URL para esta aplicación específica
 urlpatterns = [
@@ -8,6 +12,11 @@ urlpatterns = [
         'matricular/<int:curso_id>/', # URL del navegador. <int:curso_id> captura el ID de la URL y lo pasa como entero a la vista
         matricularse,                 # La función de la vista que se ejecutará al visitar esta URL
         name='matricularse'           # Nombre único de la ruta para poder llamarla desde plantillas (templates) o redirecciones
-    )
+    ),
+    path(
+        'mis-cursos/',
+        mis_cursos,
+        name='mis_cursos'
+    ),
 ]
 
