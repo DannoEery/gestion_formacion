@@ -1,85 +1,70 @@
 {% extends 'base.html' %}
-{# Indica que esta plantilla hereda de base.html, reutilizando su estructura general (header, footer, etc.) #}
-
+{# Indica que esta plantilla hereda de base.html, reutilizando su estructura general #}
 {% block title %}
 {{ curso.nombre }}
 {% endblock %}
-{# Define el título de la página. En este caso será el nombre del curso #}
-
 {% block content %}
-{# Inicio del bloque principal de contenido de la página #}
-
 <div class="card">
-    {# Tarjeta de Bootstrap que contiene toda la información del curso #}
-
     {% if curso.imagen %}
-    {# Condición: solo muestra la imagen si el curso tiene una asignada #}
-
     <img src="{{ curso.imagen.url }}" class="card-img-top" alt="{{ curso.nombre }}">
-    {# Muestra la imagen del curso desde MEDIA_URL #}
-
     {% endif %}
-
     <div class="card-body">
-        {# Cuerpo de la tarjeta donde se muestra la información del curso #}
-
         <h1>
             {{ curso.nombre }}
         </h1>
-        {# Nombre del curso como título principal #}
-
         <hr>
-        {# Línea separadora visual #}
-
         <p>
             <strong>Profesor:</strong>
             {{ curso.profesor }}
         </p>
-        {# Muestra el profesor asignado al curso #}
-
         <p>
             <strong>Fecha inicio:</strong>
             {{ curso.fecha_inicio }}
         </p>
-        {# Muestra la fecha de inicio del curso #}
-
         <p>
             <strong>Fecha fin:</strong>
             {{ curso.fecha_fin }}
         </p>
-        {# Muestra la fecha de finalización del curso #}
-
         <p>
             <strong>Plazas:</strong>
             {{ curso.plazas }}
         </p>
-        {# Muestra el número de plazas disponibles #}
 
+        <!-- ==========================
+             PLAZAS OCUPADAS
+        =========================== -->
+        <p>
+            <strong>
+                Plazas ocupadas:
+            </strong>
+            {{ ocupadas }}
+            /
+            {{ curso.plazas }}
+        </p>
         <hr>
-        {# Separador visual #}
-
         <p>
             {{ curso.descripcion }}
         </p>
-        {# Muestra la descripción completa del curso #}
-
         <hr>
-        {# Separador visual para aislar las opciones de acción de la descripción #}
-        
         {% if user.is_authenticated %}
-            {# Si el usuario ha iniciado sesión, renderiza el botón de acción directa #}
-            <a href="{% url 'matricularse' curso.id %}" class="btn btn-success">
-                Matricularme
+
+        <!-- ==========================
+                 CONTROL DE PLAZAS
+            =========================== -->
+
+        {% if ocupadas < curso.plazas %} <a href="{% url 'matricularse' curso.id %}" class="btn btn-success">
+            Matricularme
             </a>
-        {% else %}
-            {# Si es un visitante anónimo, muestra un aviso de Bootstrap en color azul informativo #}
+            {% else %}
+            <div class="alert alert-danger">
+                No quedan plazas.
+            </div>
+            {% endif %}
+            {% else %}
             <div class="alert alert-info">
                 Debes iniciar sesión para matricularte.
             </div>
-        {% endif %}
-
+            {% endif %}
     </div>
 </div>
-
 {% endblock %}
-{# Fin del bloque de contenido #}
