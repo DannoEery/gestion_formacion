@@ -71,6 +71,12 @@ urlpatterns = [
             'cursos.urls'
         )
     ),
+
+    path(
+        'matriculas/',
+        include(
+            'matriculas.urls')
+    ),
 ]
 # Fin de las rutas globales del proyecto
 if settings.DEBUG:
