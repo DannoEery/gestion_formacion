@@ -53,6 +53,11 @@
                 </ul>
                 <div>
                     {% if user.is_authenticated %}
+                    <!-- Botón de Bootstrap de color amarillo (btn-warning) visible únicamente para usuarios logueados -->
+                    <!-- 'me-2' añade un pequeño margen a la derecha para separarlo del nombre de usuario -->
+                    <a href="{% url 'mis_cursos' %}" class="btn btn-warning me-2">
+                        Mis Cursos
+                    </a>
                     <span class="text-white me-3">
                         {{ user.username }}
                     </span>

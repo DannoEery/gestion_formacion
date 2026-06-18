@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{# Hereda la estructura global del proyecto definida en base.html (navbar, contenedores, etc.) #}
+
+{% block title %}
+Mis Cursos
+{% endblock %}
+{# Define el título dinámico que se mostrará en la pestaña del navegador #}
+
+{% block content %}
+{# Inicio del bloque de contenido principal que se inyectará en la plantilla base #}
+
+<h1>
+Mis Cursos
+</h1>
+{# Título principal de la sección visible para el usuario #}
+
+<table class="table">
+{# Clase 'table' de Bootstrap que aplica un diseño limpio y moderno con líneas divisorias #}
+    <thead>
+        <tr>
+            {# Cabecera de la tabla con los títulos de cada columna #}
+            <th>Curso</th>
+            <th>Profesor</th>
+            <th>Fecha inicio</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for matricula in matriculas %}
+        {# Bucle que recorre cada registro de matrícula enviado desde la vista mis_cursos #}
+        <tr>
+            <td>
+                {{ matricula.curso.nombre }}
+                {# Accede a la relación inversa para pintar el nombre del curso #}
+            </td>
+            <td>
+                {{ matricula.curso.profesor }}
+                {# Muestra el nombre del profesor asignado a ese curso específico #}
+            </td>
+            <td>
+                {{ matricula.curso.fecha_inicio }}
+                {# Muestra la fecha programada para el inicio de las clases #}
+            </td>
+        </tr>
+        {% empty %}
+        {# Bloque especial de Django que se ejecuta de forma automática si la lista 'matriculas' viene vacía #}
+        <tr>
+            <td colspan="3" class="text-center text-muted">
+                {# 'colspan="3"' expande la celda a lo largo de las 3 columnas para que el diseño no se rompa #}
+                No tienes cursos matriculados.
+            </td>
+        </tr>
+        {% endfor %}
+        {# Cierre del bucle for #}
+    </tbody>
+</table>
+
+{% endblock %}
+{# Fin del bloque de contenido #}
