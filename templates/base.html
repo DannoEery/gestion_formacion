@@ -74,7 +74,18 @@
             </div>
         </div>
     </nav>
-
+    <!-- Contenedor dinámico que renderiza las notificaciones flotantes de Django -->
+    <div class="container mt-3">
+        {% if messages %}
+            {% for message in messages %}
+                <!-- La etiqueta 'message.tags' de Django mapea automáticamente con los estilos de Bootstrap (success, warning, info, danger) -->
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    
     <div class="container mt-4">
         <!-- Contenedor principal del contenido de cada página -->
         <!-- mt-4 añade margen superior para separar del navbar -->
