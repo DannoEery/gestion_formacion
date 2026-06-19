@@ -1,8 +1,9 @@
 from django.urls import path
 from .views import matricularse
 from .views import (
-matricularse,
-mis_cursos
+    matricularse,
+    mis_cursos,
+    dashboard
 )
 
 # Lista que define los patrones de URL para esta aplicación específica
@@ -17,6 +18,11 @@ urlpatterns = [
         'mis-cursos/',
         mis_cursos,
         name='mis_cursos'
+    ),
+    path(
+        'dashboard/',
+        dashboard,
+        name='dashboard'
     ),
 ]
 
