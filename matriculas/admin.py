@@ -32,8 +32,16 @@ class MatriculaAdmin(admin.ModelAdmin):
     # ==========================
 
     date_hierarchy = 'fecha_matricula'
-    
+
     # Orden predeterminado en el que se mostrarán los registros de la lista
     ordering = (
         '-fecha_matricula', # Ordena de forma descendente (el '-' significa de la más reciente a la más antigua)
+    )
+
+    # ==========================
+    # CAMPOS SOLO LECTURA
+    # ==========================
+
+    readonly_fields = (
+        'fecha_matricula',
     )
