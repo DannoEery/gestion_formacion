@@ -17,7 +17,23 @@ class MatriculaAdmin(admin.ModelAdmin):
         'curso__nombre',    # Permite buscar por el nombre del curso
     )
     
-    
+    # ==========================
+    # FILTROS ADMIN
+    # ==========================
+
+    list_filter = (
+        'curso',
+        'fecha_matricula',
+    )
+
+
+    # ==========================
+    # NAVEGACIÓN POR FECHAS
+    # ==========================
+
+    date_hierarchy = (
+        'fecha_matricula',
+    )
     # Orden predeterminado en el que se mostrarán los registros de la lista
     ordering = (
         '-fecha_matricula', # Ordena de forma descendente (el '-' significa de la más reciente a la más antigua)
