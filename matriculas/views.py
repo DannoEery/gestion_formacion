@@ -16,11 +16,8 @@ def matricularse(request, curso_id):
         activo=True
     )
 
-    # ==================================
-    # 16. SOLO ALUMNOS
-    # ==================================
-
-    if request.user.tipo != "alumno":
+    # Solo alumnos
+    if request.user.tipo != 'alumno':
 
         messages.error(
             request,
@@ -29,8 +26,43 @@ def matricularse(request, curso_id):
 
         return redirect(
             'detalle_curso',
-            curso.id
+            curso_id=curso.id
         )
+
+    inscritos = curso.matriculas.count()
+
+    if inscritos >= curso.plazas:
+
+        messages.error(
+            request,
+            "No quedan plazas."
+        )
+
+        return redirect(
+            'detalle_curso',
+            curso_id=curso.id
+        )
+
+    matricula, creada = Matricula.objects.get_or_create(
+        alumno=request.user,
+        curso=curso
+    )
+
+    if creada:
+        messages.success(
+            request,
+            "Matrícula realizada correctamente."
+        )
+    else:
+        messages.warning(
+            request,
+            "Ya estás matriculado en este curso."
+        )
+
+    return redirect(
+        'detalle_curso',
+        curso_id=curso.id
+    )
 
     # ==================================
     # 14. CONTROL DE PLAZAS
