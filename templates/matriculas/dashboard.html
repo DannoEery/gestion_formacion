@@ -1,0 +1,70 @@
+{# Extiende de la plantilla base común del proyecto para heredar el diseño general #}
+{% extends 'base.html' %}
+
+{# Define el bloque del título específico para esta página del navegador #}
+{% block title %}
+Dashboard
+{% endblock %}
+
+{# Define el contenido principal que se inyectará en la plantilla base #}
+{% block content %}
+<h1 class="mb-4">
+Dashboard Alumno
+</h1>
+
+{# Contenedor principal de Bootstrap en formato de fila para organizar las tarjetas #}
+<div class="row">
+    
+    {# Primera columna: Tarjeta para el contador total de matrículas #}
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>Total Matrículas</h5>
+                {# Imprime directamente el número entero calculado en la vista #}
+                <h2>
+                {{ total_matriculas }}
+                </h2>
+            </div>
+        </div>
+    </div>
+    
+    {# Segunda columna: Tarjeta para el nombre del curso de la última matrícula #}
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>Última Matrícula</h5>
+                <p>
+                {# Evalúa si existe un objeto matrícula en la variable enviada por la vista #}
+                {% if ultima_matricula %}
+                {# Si existe, accede a la relación del curso y pinta su nombre #}
+                {{ ultima_matricula.curso.nombre }}
+                {% else %}
+                {# Si la variable viene vacía (el alumno no tiene matrículas), muestra este texto #}
+                Sin datos
+                {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    {# Tercera columna: Tarjeta para el nombre del próximo curso a comenzar #}
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>Próximo Curso</h5>
+                <p>
+                {# Evalúa si la vista encontró un curso programado para el alumno #}
+                {% if proximo_curso %}
+                {# Si existe, imprime el nombre del curso #}
+                {{ proximo_curso.nombre }}
+                {% else %}
+                {# Si no hay cursos futuros registrados, muestra este texto #}
+                Sin datos
+                {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}
