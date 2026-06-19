@@ -171,6 +171,14 @@ def dashboard(request):
         )
         .first()
     )
+
+    ultimas_matriculas = (
+        Matricula.objects.filter(
+            alumno=request.user
+        )
+        .select_related('curso')
+        .order_by('-fecha_matricula')[:5]
+    )
     
     # Renderiza la plantilla HTML especificada y le pasa las variables calculadas
     # en un diccionario (contexto) para que puedan mostrarse en el navegador.
@@ -181,6 +189,7 @@ def dashboard(request):
             'total_matriculas': total_matriculas,
             'ultima_matricula': ultima_matricula,
             'proximo_curso': proximo_curso,
+            'ultimas_matriculas': ultimas_matriculas,
         }
     )
 
