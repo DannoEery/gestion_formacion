@@ -109,7 +109,7 @@ def dashboard(request):
             "ultima_matricula": ultima_matricula,
             "proximo_curso": proximo_curso,
             "ultimas_matriculas": ultimas_matriculas,
-            'cursos_disponibeles': cursos_disponibles
+            'cursos_disponibles': cursos_disponibles
         },
     )
 
