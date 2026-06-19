@@ -89,6 +89,16 @@ def dashboard(request):
         .order_by("-fecha_matricula")[:5]
     )
 
+    # ===========================
+    # CURSOS DISPONIBLES
+    # ===========================
+
+    cursos_disponibles = (
+        Curso.objects.filter(
+            activo=True
+        ).count()
+    )
+    
     # Renderiza la plantilla HTML especificada y le pasa las variables calculadas
     # en un diccionario (contexto) para que puedan mostrarse en el navegador.
     return render(
