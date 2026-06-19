@@ -183,3 +183,34 @@ def dashboard(request):
             'proximo_curso': proximo_curso,
         }
     )
+
+# Decorador que restringe el acceso solo a usuarios autenticados.
+# Si un usuario anónimo intenta acceder, es enviado al login.
+@login_required
+def cancelar_matricula(
+    request,
+    matricula_id
+):
+    # Busca la matrícula por su clave primaria (pk) y se asegura de que pertenezca al usuario actual.
+    # Si la matrícula no existe o pertenece a otro alumno, devuelve un error 404 (No encontrado).
+    # Esto es una medida crítica de seguridad para evitar que un usuario borre datos de otro.
+    matricula = get_object_or_404(
+        Matricula,
+        pk=matricula_id,
+        alumno=request.user
+    )
+    
+    # Elimina el registro de la matrícula seleccionada de la base de datos.
+    matricula.delete()
+    
+    # Registra un mensaje de éxito en el sistema de mensajes de Django.
+    # Este mensaje se mostrará al usuario en la siguiente pantalla que visite.
+    messages.success(
+        request,
+        'Matrícula cancelada.'
+    )
+    
+    # Redirige el navegador del usuario hacia la vista llamada 'mis_cursos'.
+    return redirect(
+        'mis_cursos'
+    )
