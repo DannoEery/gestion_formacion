@@ -3,7 +3,8 @@ from .views import matricularse
 from .views import (
     matricularse,
     mis_cursos,
-    dashboard
+    dashboard,
+    cancelar_matricula
 )
 
 # Lista que define los patrones de URL para esta aplicación específica
@@ -23,6 +24,12 @@ urlpatterns = [
         'dashboard/',
         dashboard,
         name='dashboard'
+    ),
+
+    path(
+        'cancelar/<int:matricula_id>/',
+        cancelar_matricula,
+        name='cancelar_matricula'
     ),
 ]
 
