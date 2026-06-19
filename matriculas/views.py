@@ -98,7 +98,7 @@ def dashboard(request):
             activo=True
         ).count()
     )
-    
+
     # Renderiza la plantilla HTML especificada y le pasa las variables calculadas
     # en un diccionario (contexto) para que puedan mostrarse en el navegador.
     return render(
@@ -109,6 +109,7 @@ def dashboard(request):
             "ultima_matricula": ultima_matricula,
             "proximo_curso": proximo_curso,
             "ultimas_matriculas": ultimas_matriculas,
+            'cursos_disponibeles': cursos_disponibles
         },
     )
 
