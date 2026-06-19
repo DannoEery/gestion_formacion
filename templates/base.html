@@ -63,9 +63,9 @@
                     </a>
                     {% endif %}
                     <!-- =========================
-                            MENU PROFESOR
+                            MENU PROFESOR Y ADMIN
                     ========================== -->
-                    {% if user.tipo == 'profesor' %}
+                    {% if user.tipo == 'profesor' or user.tipo == 'administrador' %}
                     <a href="/admin/cursos/curso/" class="btn btn-success me-2">
                         Gestionar Cursos
                     </a>
