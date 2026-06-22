@@ -5,6 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from .models import Curso
 # Importa el modelo Curso desde la app actual
 
+from profesores.models import Profesor
+
 # Desde el módulo de consultas de Django...
 from django.db.models import (
     Q,
@@ -14,6 +16,11 @@ from django.db.models import (
 
 def lista_cursos(request):
     # Vista que muestra la lista de cursos
+
+    # Obtener profesor seleccionado
+    profesor_id = request.GET.get(
+        'profesor'
+    )
 
     # Recoger texto del buscador
     busqueda = request.GET.get(
@@ -34,6 +41,12 @@ def lista_cursos(request):
             |  # Operador lógico OR (O): el registro se incluirá si cumple la condición de la izquierda O la de la derecha.
             Q(descripcion__icontains=busqueda)  # Busca si el texto está incluido en el campo 'descripcion', también ignorando mayúsculas/minúsculas.
         )
+    if profesor_id:  # Evalúa si la variable 'profesor_id' contiene un valor válido (es decir, si no está vacía o es None).
+        cursos = cursos.filter(  # Sobrescribe el QuerySet de 'cursos' aplicando un nuevo filtro de base de datos.
+            profesor_id=profesor_id  # Restringe los resultados para mostrar únicamente los cursos cuyo campo relacional 'profesor_id' coincida con el ID recibido.
+    )
+    # Obtener profesores para el formulario
+    profesores = Profesor.objects.all()
 
     return render(
     request,
@@ -42,7 +55,8 @@ def lista_cursos(request):
         'cursos': cursos,
         'total_cursos': cursos.count(),
         # Cuenta el total de cursos activos y lo envía a la plantilla
-        'busqueda': busqueda
+        'busqueda': busqueda,
+        'profesores': profesores
     }
 )
 
