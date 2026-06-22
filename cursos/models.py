@@ -7,6 +7,12 @@ from profesores.models import Profesor
 from django.core.exceptions import ValidationError
 # Permite lanzar errores de validación en los modelos
 
+# Desde el módulo de utilidades de texto de Django...
+from django.utils.text import (
+    slugify,
+)  # ...importa la función para limpiar y convertir textos en cadenas aptas para URLs (slugs).
+
+
 class Curso(models.Model):
     # Modelo que representa un curso dentro de la plataforma
 
@@ -14,6 +20,11 @@ class Curso(models.Model):
         max_length=200
     )
     # Nombre del curso (texto corto, máximo 200 caracteres)
+
+    slug = models.SlugField(  # Define un campo de texto especializado para almacenar "slugs" (caracteres seguros para URLs).
+    unique=True  # Exige que cada registro en la base de datos tenga un slug único; no se permiten duplicados.
+)
+
 
     descripcion = models.TextField()
     # Descripción larga del curso
@@ -74,6 +85,19 @@ class Curso(models.Model):
                 "La fecha final no puede ser anterior a la inicial"
             )
             # Lanza un error si la regla no se cumple
+    def save(self, *args, **kwargs):
+    # Sobrescribe el método de guardado estándar de Django para añadir lógica personalizada antes de almacenar los datos.
+    # (*args, **kwargs) asegura que el método acepte cualquier argumento adicional requerido por el framework.
+
+        if not self.slug:
+            # Verifica si el campo 'slug' se encuentra vacío en el objeto actual.
+
+            self.slug = slugify(self.nombre)
+            # Genera automáticamente el slug limpiando el texto del campo 'nombre' y lo asigna al atributo 'slug'.
+
+        super().save(*args, **kwargs)
+        # Invoca el método 'save' original de la clase base (models.Model).
+        # Este paso es obligatorio para que los cambios se escriban de forma efectiva en la base de datos.
 
     def __str__(self):
         # Representación en texto del objeto Curso
