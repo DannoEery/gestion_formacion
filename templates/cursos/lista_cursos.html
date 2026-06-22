@@ -22,6 +22,16 @@ Cursos
             Buscar
         </button>
     </div>
+    <select name="profesor" class="form-select">
+        <option value="">
+            Todos los profesores
+        </option>
+        {% for profesor in profesores %}
+        <option value="{{ profesor.id }}">
+            {{ profesor }}
+        </option>
+        {% endfor %}
+    </select>
 </form>
 
 <h1 class="mb-4">
