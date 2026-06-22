@@ -28,18 +28,16 @@ Dashboard
             </div>
         </div>
     </div>
+
     {# Segunda columna: Tarjeta para el nombre del curso de la última matrícula #}
     <div class="col-md-4">
         <div class="card">
             <div class="card-body">
                 <h5>Última Matrícula</h5>
                 <p>
-                    {# Evalúa si existe un objeto matrícula en la variable enviada por la vista #}
                     {% if ultima_matricula %}
-                    {# Si existe, accede a la relación del curso y pinta su nombre #}
                     {{ ultima_matricula.curso.nombre }}
                     {% else %}
-                    {# Si la variable viene vacía (el alumno no tiene matrículas), muestra este texto #}
                     Sin datos
                     {% endif %}
                 </p>
@@ -53,37 +51,56 @@ Dashboard
             <div class="card-body">
                 <h5>Próximo Curso</h5>
                 <p>
-                    {# Evalúa si la vista encontró un curso programado para el alumno #}
                     {% if proximo_curso %}
-                    {# Si existe, imprime el nombre del curso #}
                     {{ proximo_curso.nombre }}
                     {% else %}
-                    {# Si no hay cursos futuros registrados, muestra este texto #}
                     Sin datos
                     {% endif %}
                 </p>
             </div>
         </div>
     </div>
-    <div class="col-md-4">
 
-    <div class="card text-center">
+    <div class="col-md-4 mt-3">
+        <div class="card text-center">
+            <div class="card-body">
 
-        <div class="card-body">
+                <h5>
+                    Cursos Disponibles
+                </h5>
 
-            <h5>
-                Cursos Disponibles
-            </h5>
+                <h1>
+                    {{ cursos_disponibles }}
+                </h1>
 
-
-            <h1>
-                {{ cursos_disponibles }}
-            </h1>
-
+            </div>
         </div>
-
     </div>
 
 </div>
-</div>
+
+<hr>
+
+<h3>
+    Últimas Matrículas
+</h3>
+
+<ul class="list-group">
+
+    {% for matricula in ultimas_matriculas %}
+
+    <li class="list-group-item">
+        {{ matricula.curso.nombre }}
+    </li>
+
+    {% empty %}
+
+    <li class="list-group-item">
+        No hay matrículas.
+    </li>
+
+    {% endfor %}
+
+</ul>
+
 {% endblock %}
