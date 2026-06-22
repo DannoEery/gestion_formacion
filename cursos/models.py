@@ -7,6 +7,12 @@ from profesores.models import Profesor
 from django.core.exceptions import ValidationError
 # Permite lanzar errores de validación en los modelos
 
+# Desde el módulo de utilidades de texto del framework Django...
+from django.utils.text import (
+    slugify,
+)  # ...importa la función para crear "slugs" amigables para SEO y URLs.
+
+
 
 class Curso(models.Model):
     # Modelo que representa un curso dentro de la plataforma
@@ -15,6 +21,12 @@ class Curso(models.Model):
         max_length=200
     )
     # Nombre del curso (texto corto, máximo 200 caracteres)
+
+    slug = models.SlugField(  # Define un campo especializado para almacenar slugs de URLs (solo letras, números, guiones y guiones bajos).
+    unique=True,  # Garantiza que no existan dos registros con el mismo slug en la base de datos (vital para URLs únicas y SEO).
+    blank=True,  # Permite que el campo quede vacío en los formularios (útil para que Django lo genere automáticamente después).
+)
+
 
     descripcion = models.TextField()
     # Descripción larga del curso
@@ -75,6 +87,20 @@ class Curso(models.Model):
                 "La fecha final no puede ser anterior a la inicial"
             )
             # Lanza un error si la regla no se cumple
+
+    def save(self, *args, **kwargs):
+    # Sobrescribe el método estándar de Django que se ejecuta al guardar el objeto en la base de datos.
+    # (*args, **kwargs) permite recibir cualquier argumento adicional que Django necesite pasar internamente.
+
+        if not self.slug:
+        # Verifica si el campo 'slug' está vacío (por ejemplo, al crear un curso nuevo).
+        
+            self.slug = slugify(self.nombre)
+            # Transforma el texto de 'self.nombre' en un formato seguro para URLs y lo asigna al campo 'slug'.
+
+        super().save(*args, **kwargs)
+        # Llama al método 'save' original de la clase padre (models.Model).
+        # Esto es crucial para que Django realmente guarde los datos en la base de datos.
 
     def __str__(self):
         # Representación en texto del objeto Curso
