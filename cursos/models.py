@@ -23,7 +23,7 @@ class Curso(models.Model):
 
     slug = models.SlugField(  # Define un campo de texto especializado para almacenar "slugs" (caracteres seguros para URLs).
     unique=True  # Exige que cada registro en la base de datos tenga un slug único; no se permiten duplicados.
-)
+    )
 
 
     descripcion = models.TextField()

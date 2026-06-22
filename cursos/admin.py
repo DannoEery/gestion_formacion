@@ -123,7 +123,7 @@ class CursoAdmin(admin.ModelAdmin):
     # Estructura y agrupa los campos del formulario de edición/creación en secciones visuales (cajas con títulos)
     fieldsets = (
         ('Información General', {
-            'fields': ('nombre', 'descripcion', 'profesor', )
+            'fields': ('nombre', 'descripcion', 'profesor', 'slug' )
         }),
         ('Planificación', {
             'fields': ('fecha_inicio', 'fecha_fin', 'plazas', )
