@@ -25,11 +25,12 @@ def lista_cursos(request):
 )
 
 
-def detalle_curso(request, curso_id):
+def detalle_curso(request, slug):
 
     curso = get_object_or_404(
         Curso,
-        id=curso_id
+        slug = slug,
+        activo=True
     )
 
 
