@@ -26,13 +26,13 @@ Dashboard
                     Última Matrícula
                 </h5>
                 {% if ultima_matricula %}
-                    <p>
-                        {{ ultima_matricula.curso.nombre }}
-                    </p>
+                <p>
+                    {{ ultima_matricula.curso.nombre }}
+                </p>
                 {% else %}
-                    <p>
-                        Sin datos
-                    </p>
+                <p>
+                    Sin datos
+                </p>
                 {% endif %}
             </div>
         </div>
@@ -44,13 +44,13 @@ Dashboard
                     Próximo Curso
                 </h5>
                 {% if proximo_curso %}
-                    <p>
-                        {{ proximo_curso.nombre }}
-                    </p>
+                <p>
+                    {{ proximo_curso.nombre }}
+                </p>
                 {% else %}
-                    <p>
-                        Sin datos
-                    </p>
+                <p>
+                    Sin datos
+                </p>
                 {% endif %}
             </div>
         </div>
@@ -77,15 +77,15 @@ Dashboard
                     Últimas Matrículas
                 </h5>
                 <ul>
-                {% for matricula in ultimas_matriculas %}
+                    {% for matricula in ultimas_matriculas %}
                     <li>
                         {{ matricula.curso.nombre }}
                     </li>
-                {% empty %}
+                    {% empty %}
                     <li>
                         Sin matrículas
                     </li>
-                {% endfor %}
+                    {% endfor %}
                 </ul>
             </div>
         </div>
