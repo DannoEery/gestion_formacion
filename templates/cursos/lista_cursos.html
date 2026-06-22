@@ -34,8 +34,8 @@ Cursos
         </div>
         <div class="col-auto">
             <button class="btn btn-primary">
-            Buscar
-        </button>
+                Buscar
+            </button>
         </div>
     </div>
 </form>
@@ -110,6 +110,30 @@ Cursos
 
 </div>
 {# Fin del contenedor row #}
+<nav> <!-- Define una sección de navegación del documento que agrupa los enlaces de paginación de forma semántica -->
+    <ul class="pagination"> <!-- Clase de Bootstrap que aplica los estilos visuales nativos para barras de paginación (bordes, alineación y espaciado) -->
+        {% if cursos.has_previous %} <!-- Etiqueta lógica de Django: comprueba si la página actual de cursos tiene una página anterior disponible -->
+        <li class="page-item"> <!-- Clase de Bootstrap que identifica a este elemento de la lista como un componente de la paginación -->
+            <a class="page-link" href="?page={{ cursos.previous_page_number }}"> <!-- Enlace que recarga la página pasando el número de la página anterior como parámetro GET en la URL -->
+                Anterior <!-- Texto visible para el usuario que indica el botón para retroceder -->
+            </a>
+        </li>
+        {% endif %} <!-- Cierra la condición lógica de validación de página anterior -->
+        <li class="page-item active"> <!-- Clase 'active' de Bootstrap que destaca visualmente este botón (generalmente de color azul) para indicar que es la página actual -->
+            <span class="page-link"> <!-- Elemento de solo lectura que envuelve e impide hacer clic sobre el número de página que ya se está visualizando -->
+                {{ cursos.number }} <!-- Inyecta dinámicamente el número de la página en la que se encuentra el usuario actualmente -->
+            </span>
+        </li>
+        {% if cursos.has_next %} <!-- Etiqueta lógica de Django: comprueba si la página actual de cursos tiene una página posterior disponible -->
+        <li class="page-item"> <!-- Clase de Bootstrap que identifica a este elemento de la lista como un componente de la paginación -->
+            <a class="page-link" href="?page={{ cursos.next_page_number }}"> <!-- Enlace que recarga la página pasando el número de la página siguiente como parámetro GET en la URL -->
+                Siguiente <!-- Texto visible para el usuario que indica el botón para avanzar -->
+
+            </a>
+        </li>
+        {% endif %} <!-- Cierra la condición lógica de validación de página siguiente -->
+    </ul>
+</nav>
 
 {% endblock %}
 {# Fin del bloque de contenido #}
