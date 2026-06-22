@@ -9,6 +9,12 @@ Cursos
 {% block content %}
 {# Inicio del bloque principal de contenido que se insertará en base.html #}
 
+<h1 class="mb-4">
+    Oferta Formativa
+</h1>
+{# Título principal de la página con margen inferior (Bootstrap: mb-4) #}
+
+
 <p class="text-muted">
     Cursos disponibles: {{ total_cursos }}
 </p>
@@ -34,10 +40,6 @@ Cursos
     </select>
 </form>
 
-<h1 class="mb-4">
-    Oferta Formativa
-</h1>
-{# Título principal de la página con margen inferior (Bootstrap: mb-4) #}
 
 <div class="row">
     {# Contenedor de Bootstrap para organizar los cursos en filas #}
