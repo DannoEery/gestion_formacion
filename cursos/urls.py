@@ -24,7 +24,7 @@ urlpatterns = [
     ),
 
     path(
-        '<slug.slug>/',
+        '<slug:slug>/',
         # Ruta dinámica: recibe un número entero como ID del curso
         # Ejemplo: /cursos/3/
 
