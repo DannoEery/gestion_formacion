@@ -8,6 +8,7 @@ Dashboard
 
 {# Define el contenido principal que se inyectará en la plantilla base #}
 {% block content %}
+
 <h1 class="mb-4">
     Dashboard Alumno
 </h1>
@@ -15,54 +16,133 @@ Dashboard
 {# Contenedor principal de Bootstrap en formato de fila para organizar las tarjetas #}
 <div class="row">
 
-    {# Primera columna: Tarjeta para el contador total de matrículas #}
+    {# =======================================================
+       TARJETA 1: TOTAL DE MATRÍCULAS
+       ======================================================= #}
     <div class="col-md-4">
+
         <div class="card text-center">
+
             <div class="card-body">
+
                 <h5>
                     Cursos Matriculados
                 </h5>
+
                 <h1>
                     {{ total_matriculas }}
                 </h1>
+
             </div>
+
         </div>
+
     </div>
 
-    {# Segunda columna: Tarjeta para el nombre del curso de la última matrícula #}
+    {# =======================================================
+       TARJETA 2: ÚLTIMA MATRÍCULA + ÚLTIMAS MATRÍCULAS
+       ======================================================= #}
     <div class="col-md-4">
+
         <div class="card">
+
             <div class="card-body">
-                <h5>Última Matrícula</h5>
+
+                {# Título de la sección #}
+                <h5>
+                    Última Matrícula
+                </h5>
+
+                {# Muestra la última matrícula realizada por el alumno #}
                 <p>
+
                     {% if ultima_matricula %}
-                    {{ ultima_matricula.curso.nombre }}
+
+                        {{ ultima_matricula.curso.nombre }}
+
                     {% else %}
-                    Sin datos
+
+                        Sin datos
+
                     {% endif %}
+
                 </p>
+
+                <hr>
+
+                {# Listado de las últimas matrículas realizadas #}
+                <h6>
+                    Últimas Matrículas
+                </h6>
+
+                <ul class="list-group">
+
+                    {% for matricula in ultimas_matriculas %}
+
+                    <li class="list-group-item">
+
+                        {{ matricula.curso.nombre }}
+
+                    </li>
+
+                    {% empty %}
+
+                    <li class="list-group-item">
+
+                        No hay matrículas.
+
+                    </li>
+
+                    {% endfor %}
+
+                </ul>
+
             </div>
+
         </div>
+
     </div>
 
-    {# Tercera columna: Tarjeta para el nombre del próximo curso a comenzar #}
+    {# =======================================================
+       TARJETA 3: PRÓXIMO CURSO
+       ======================================================= #}
     <div class="col-md-4">
+
         <div class="card">
+
             <div class="card-body">
-                <h5>Próximo Curso</h5>
+
+                <h5>
+                    Próximo Curso
+                </h5>
+
                 <p>
+
                     {% if proximo_curso %}
-                    {{ proximo_curso.nombre }}
+
+                        {{ proximo_curso.nombre }}
+
                     {% else %}
-                    Sin datos
+
+                        Sin datos
+
                     {% endif %}
+
                 </p>
+
             </div>
+
         </div>
+
     </div>
 
+    {# =======================================================
+       TARJETA 4: CURSOS DISPONIBLES
+       ======================================================= #}
     <div class="col-md-4 mt-3">
+
         <div class="card text-center">
+
             <div class="card-body">
 
                 <h5>
@@ -74,33 +154,11 @@ Dashboard
                 </h1>
 
             </div>
+
         </div>
+
     </div>
 
 </div>
-
-<hr>
-
-<h3>
-    Últimas Matrículas
-</h3>
-
-<ul class="list-group">
-
-    {% for matricula in ultimas_matriculas %}
-
-    <li class="list-group-item">
-        {{ matricula.curso.nombre }}
-    </li>
-
-    {% empty %}
-
-    <li class="list-group-item">
-        No hay matrículas.
-    </li>
-
-    {% endfor %}
-
-</ul>
 
 {% endblock %}
