@@ -5,22 +5,44 @@ from django.shortcuts import render, get_object_or_404
 from .models import Curso
 # Importa el modelo Curso desde la app actual
 
+# Desde el módulo de consultas de Django...
+from django.db.models import (
+    Q,
+)  # ...importa el objeto Q para construir consultas complejas con operadores lógicos (OR / AND).
+
+
 
 def lista_cursos(request):
     # Vista que muestra la lista de cursos
+
+    # Recoger texto del buscador
+    busqueda = request.GET.get(
+        "buscar",  # Busca el parámetro llamado 'buscar' dentro de la URL (enviado por el formulario mediante método GET).
+        "",  # Define una cadena de texto vacía como valor por defecto si el parámetro 'buscar' no existe en la URL.
+    )
+
 
     cursos = Curso.objects.filter(
         activo=True
     )
     # Obtiene todos los cursos que estén marcados como activos
 
+    # Filtrar si hay búsqueda
+    if busqueda:  # Evalúa si la variable 'busqueda' contiene texto (es decir, si el usuario escribió algo en el buscador).
+        cursos = cursos.filter(  # Sobrescribe el QuerySet de 'cursos' aplicando un nuevo filtro a la base de datos.
+            Q(nombre__icontains=busqueda)  # Busca si el texto está incluido en el campo 'nombre', ignorando mayúsculas y minúsculas.
+            |  # Operador lógico OR (O): el registro se incluirá si cumple la condición de la izquierda O la de la derecha.
+            Q(descripcion__icontains=busqueda)  # Busca si el texto está incluido en el campo 'descripcion', también ignorando mayúsculas/minúsculas.
+        )
+
     return render(
     request,
     'cursos/lista_cursos.html',
     {
         'cursos': cursos,
-        'total_cursos': cursos.count()
+        'total_cursos': cursos.count(),
         # Cuenta el total de cursos activos y lo envía a la plantilla
+        'busqueda': busqueda
     }
 )
 
