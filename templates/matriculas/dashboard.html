@@ -1,26 +1,28 @@
-{# Extiende de la plantilla base común del proyecto para heredar el diseño general #}
 {% extends 'base.html' %}
 
-{# Define el bloque del título específico para esta página del navegador #}
+{# Título de la página #}
 {% block title %}
 Dashboard
 {% endblock %}
 
-{# Define el contenido principal que se inyectará en la plantilla base #}
+
 {% block content %}
 
 <h1 class="mb-4">
     Dashboard Alumno
 </h1>
 
-{# Contenedor principal de Bootstrap en formato de fila para organizar las tarjetas #}
+
+{# Fila Bootstrap donde colocamos las tarjetas #}
 <div class="row">
 
-    {# =======================================================
-       TARJETA 1: TOTAL DE MATRÍCULAS
-       ======================================================= #}
-    <div class="col-md-4">
 
+    {# ==============================
+       TARJETA TOTAL MATRÍCULAS
+       Muestra cuántos cursos tiene el alumno
+       ============================== #}
+
+    <div class="col-md-4">
         <div class="card text-center">
 
             <div class="card-body">
@@ -29,6 +31,7 @@ Dashboard
                     Cursos Matriculados
                 </h5>
 
+                {# Variable enviada desde views.py #}
                 <h1>
                     {{ total_matriculas }}
                 </h1>
@@ -36,24 +39,30 @@ Dashboard
             </div>
 
         </div>
-
     </div>
 
-    {# =======================================================
-       TARJETA 2: ÚLTIMA MATRÍCULA + ÚLTIMAS MATRÍCULAS
-       ======================================================= #}
+
+
+
+    {# ==============================
+       TARJETA ÚLTIMA MATRÍCULA
+       Muestra el último curso apuntado
+       y debajo las últimas 5 matrículas
+       ============================== #}
+
     <div class="col-md-4">
 
         <div class="card">
 
             <div class="card-body">
 
-                {# Título de la sección #}
+
                 <h5>
                     Última Matrícula
                 </h5>
 
-                {# Muestra la última matrícula realizada por el alumno #}
+
+                {# Comprueba si existe una matrícula #}
                 <p>
 
                     {% if ultima_matricula %}
@@ -68,34 +77,35 @@ Dashboard
 
                 </p>
 
+
                 <hr>
 
-                {# Listado de las últimas matrículas realizadas #}
-                <h6>
-                    Últimas Matrículas
-                </h6>
 
-                <ul class="list-group">
+                {# Lista de las últimas matrículas #}
+                <h5>
+                    Últimas Matrículas
+                </h5>
+
+
+                <ul>
 
                     {% for matricula in ultimas_matriculas %}
 
-                    <li class="list-group-item">
-
+                    <li>
+                        {# Accede al nombre del curso relacionado #}
                         {{ matricula.curso.nombre }}
-
                     </li>
 
                     {% empty %}
 
-                    <li class="list-group-item">
-
-                        No hay matrículas.
-
+                    <li>
+                        No hay matrículas
                     </li>
 
                     {% endfor %}
 
                 </ul>
+
 
             </div>
 
@@ -103,9 +113,14 @@ Dashboard
 
     </div>
 
-    {# =======================================================
-       TARJETA 3: PRÓXIMO CURSO
-       ======================================================= #}
+
+
+
+
+    {# ==============================
+       TARJETA PRÓXIMO CURSO
+       ============================== #}
+
     <div class="col-md-4">
 
         <div class="card">
@@ -115,6 +130,7 @@ Dashboard
                 <h5>
                     Próximo Curso
                 </h5>
+
 
                 <p>
 
@@ -130,16 +146,23 @@ Dashboard
 
                 </p>
 
+
             </div>
 
         </div>
 
     </div>
 
-    {# =======================================================
-       TARJETA 4: CURSOS DISPONIBLES
-       ======================================================= #}
-    <div class="col-md-4 mt-3">
+
+
+
+
+    {# ==============================
+       TARJETA CURSOS DISPONIBLES
+       Cuenta cursos activos
+       ============================== #}
+
+    <div class="col-md-4">
 
         <div class="card text-center">
 
@@ -149,9 +172,11 @@ Dashboard
                     Cursos Disponibles
                 </h5>
 
+
                 <h1>
                     {{ cursos_disponibles }}
                 </h1>
+
 
             </div>
 
@@ -159,6 +184,8 @@ Dashboard
 
     </div>
 
+
 </div>
+
 
 {% endblock %}
