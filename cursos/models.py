@@ -17,9 +17,11 @@ class Curso(models.Model):
     # Modelo que representa un curso dentro de la plataforma
 
     nombre = models.CharField(
-        max_length=200
-    )
-    # Nombre del curso (texto corto, máximo 200 caracteres)
+    max_length=200,  # Define la longitud máxima permitida para el texto del nombre del curso (200 caracteres).
+    db_index=True,  # Crea un índice en la base de datos para este campo, acelerando drásticamente las búsquedas de texto.
+    )   
+    #Nombre Curso
+
 
     slug = models.SlugField(  # Define un campo de texto especializado para almacenar "slugs" (caracteres seguros para URLs).
     unique=True  # Exige que cada registro en la base de datos tenga un slug único; no se permiten duplicados.

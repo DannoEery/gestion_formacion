@@ -120,6 +120,13 @@ class CursoAdmin(admin.ModelAdmin):
     # Define el criterio de ordenación por defecto de las filas (alfabéticamente por el nombre del curso)
     ordering = ('nombre',)
     
+    # Genera automáticamente el slug desde el nombre
+    prepopulated_fields = {
+        'slug': (
+            'nombre',
+        )
+    }
+    
     # Estructura y agrupa los campos del formulario de edición/creación en secciones visuales (cajas con títulos)
     fieldsets = (
         ('Información General', {

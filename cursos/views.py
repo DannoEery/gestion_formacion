@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+
 # render: permite devolver una plantilla HTML con datos
 # get_object_or_404: obtiene un objeto o lanza error 404 si no existe
 
@@ -9,6 +10,7 @@ from django.core.paginator import (
 
 
 from .models import Curso
+
 # Importa el modelo Curso desde la app actual
 
 from profesores.models import Profesor
@@ -19,14 +21,11 @@ from django.db.models import (
 )  # ...importa el objeto Q para construir consultas complejas con operadores lógicos (OR / AND).
 
 
-
 def lista_cursos(request):
     # Vista que muestra la lista de cursos
 
     # Obtener profesor seleccionado
-    profesor_id = request.GET.get(
-        'profesor'
-    )
+    profesor_id = request.GET.get("profesor")
 
     # Recoger texto del buscador
     busqueda = request.GET.get(
@@ -34,80 +33,66 @@ def lista_cursos(request):
         "",  # Define una cadena de texto vacía como valor por defecto si el parámetro 'buscar' no existe en la URL.
     )
 
-
-    cursos = Curso.objects.filter(
-        activo=True
+    cursos = Curso.objects.select_related(
+        "profesor",  # Optimiza la base de datos trayendo la información del profesor en la misma consulta SQL (evita consultas extras).
+        "profesor__usuario",  # Realiza un "JOIN" más profundo para traer también los datos del usuario vinculado a ese profesor (como su nombre o email).
+    ).filter(
+        activo=True  # Restringe la consulta para obtener únicamente los cursos que tengan su estado marcado como activo.
     )
-    # Obtiene todos los cursos que estén marcados como activos
 
     # Filtrar si hay búsqueda
-    if busqueda:  # Evalúa si la variable 'busqueda' contiene texto (es decir, si el usuario escribió algo en el buscador).
+    if (
+        busqueda
+    ):  # Evalúa si la variable 'busqueda' contiene texto (es decir, si el usuario escribió algo en el buscador).
         cursos = cursos.filter(  # Sobrescribe el QuerySet de 'cursos' aplicando un nuevo filtro a la base de datos.
-            Q(nombre__icontains=busqueda)  # Busca si el texto está incluido en el campo 'nombre', ignorando mayúsculas y minúsculas.
-            |  # Operador lógico OR (O): el registro se incluirá si cumple la condición de la izquierda O la de la derecha.
-            Q(descripcion__icontains=busqueda)  # Busca si el texto está incluido en el campo 'descripcion', también ignorando mayúsculas/minúsculas.
+            Q(
+                nombre__icontains=busqueda
+            )  # Busca si el texto está incluido en el campo 'nombre', ignorando mayúsculas y minúsculas.  # Operador lógico OR (O): el registro se incluirá si cumple la condición de la izquierda O la de la derecha.
+            | Q(
+                descripcion__icontains=busqueda
+            )  # Busca si el texto está incluido en el campo 'descripcion', también ignorando mayúsculas/minúsculas.
         )
-    if profesor_id:  # Evalúa si la variable 'profesor_id' contiene un valor válido (es decir, si no está vacía o es None).
+    if (
+        profesor_id
+    ):  # Evalúa si la variable 'profesor_id' contiene un valor válido (es decir, si no está vacía o es None).
         cursos = cursos.filter(  # Sobrescribe el QuerySet de 'cursos' aplicando un nuevo filtro de base de datos.
             profesor_id=profesor_id  # Restringe los resultados para mostrar únicamente los cursos cuyo campo relacional 'profesor_id' coincida con el ID recibido.
-    )
+        )
     # Obtener profesores para el formulario
     profesores = Profesor.objects.all()
-       
+
     # ==========================
     # PAGINACION
     # ==========================
 
-    paginator = Paginator(
-        cursos,
-        6
-    )
+    paginator = Paginator(cursos, 6)
     # 6 cursos por página
 
-
-    page_number = request.GET.get(
-        'page'
-    )
+    page_number = request.GET.get("page")
     # Obtiene la página actual
 
-
-    cursos = paginator.get_page(
-        page_number
-    )
+    cursos = paginator.get_page(page_number)
     # Devuelve solo los cursos de esa página
 
-    
-
     return render(
-    request,
-    'cursos/lista_cursos.html',
-    {
-        'cursos': cursos,
-        'total_cursos': paginator.count,
-        # Cuenta el total de cursos activos y lo envía a la plantilla
-        'busqueda': busqueda,
-        'profesores': profesores
-    }
-)
+        request,
+        "cursos/lista_cursos.html",
+        {
+            "cursos": cursos,
+            "total_cursos": paginator.count,
+            # Cuenta el total de cursos activos y lo envía a la plantilla
+            "busqueda": busqueda,
+            "profesores": profesores,
+        },
+    )
 
 
 def detalle_curso(request, slug):
 
-    curso = get_object_or_404(
-        Curso,
-        slug = slug,
-        activo=True
-    )
-
+    curso = get_object_or_404(Curso, slug=slug, activo=True)
 
     ocupadas = curso.matriculas.count()
 
-
     return render(
-        request,
-        "cursos/detalle_curso.html",
-        {
-            "curso": curso,
-            "ocupadas": ocupadas
-        }
+        request, "cursos/detalle_curso.html", {"curso": curso, "ocupadas": ocupadas}
     )
