@@ -6,7 +6,6 @@ Dashboard
 <h1 class="mb-4">
     Dashboard Alumno
 </h1>
-{# Fila principal de tarjetas Bootstrap #}
 <div class="row">
     <div class="col-md-4">
         <div class="card text-center">
@@ -27,7 +26,6 @@ Dashboard
                 <h5>
                     Última Matrícula
                 </h5>
-                {# Comprueba si existe alguna matrícula #}
                 <p>
                     {% if ultima_matricula %}
 
@@ -36,11 +34,6 @@ Dashboard
                         Sin datos
                     {% endif %}
                 </p>
-                {# 
-                    Nueva parte:
-                    muestra las últimas 5 matrículas
-                    que vienen desde la vista dashboard()
-                #}
                 <hr>
                 <h5>
                     Últimas Matrículas
@@ -82,10 +75,6 @@ Dashboard
                 <h5>
                     Cursos Disponibles
                 </h5>
-                {# 
-                    Número de cursos activos
-                    enviado desde views.py
-                #}
                 <h1>
                     {{ cursos_disponibles }}
                 </h1>
