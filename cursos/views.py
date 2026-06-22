@@ -51,7 +51,9 @@ def lista_cursos(request):
         cursos = cursos.filter(  # Sobrescribe el QuerySet de 'cursos' aplicando un nuevo filtro de base de datos.
             profesor_id=profesor_id  # Restringe los resultados para mostrar únicamente los cursos cuyo campo relacional 'profesor_id' coincida con el ID recibido.
     )
-        
+    # Obtener profesores para el formulario
+    profesores = Profesor.objects.all()
+       
     # ==========================
     # PAGINACION
     # ==========================
@@ -73,16 +75,15 @@ def lista_cursos(request):
         page_number
     )
     # Devuelve solo los cursos de esa página
+
     
-    # Obtener profesores para el formulario
-    profesores = Profesor.objects.all()
 
     return render(
     request,
     'cursos/lista_cursos.html',
     {
         'cursos': cursos,
-        'total_cursos': cursos.count(),
+        'total_cursos': paginator.count,
         # Cuenta el total de cursos activos y lo envía a la plantilla
         'busqueda': busqueda,
         'profesores': profesores
