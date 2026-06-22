@@ -2,6 +2,12 @@ from django.shortcuts import render, get_object_or_404
 # render: permite devolver una plantilla HTML con datos
 # get_object_or_404: obtiene un objeto o lanza error 404 si no existe
 
+# Desde el módulo de utilidades de paginación nativo de Django...
+from django.core.paginator import (
+    Paginator,
+)  # ...importa la clase encargada de dividir listas de objetos grandes en páginas más pequeñas.
+
+
 from .models import Curso
 # Importa el modelo Curso desde la app actual
 
@@ -45,6 +51,29 @@ def lista_cursos(request):
         cursos = cursos.filter(  # Sobrescribe el QuerySet de 'cursos' aplicando un nuevo filtro de base de datos.
             profesor_id=profesor_id  # Restringe los resultados para mostrar únicamente los cursos cuyo campo relacional 'profesor_id' coincida con el ID recibido.
     )
+        
+    # ==========================
+    # PAGINACION
+    # ==========================
+
+    paginator = Paginator(
+        cursos,
+        6
+    )
+    # 6 cursos por página
+
+
+    page_number = request.GET.get(
+        'page'
+    )
+    # Obtiene la página actual
+
+
+    cursos = paginator.get_page(
+        page_number
+    )
+    # Devuelve solo los cursos de esa página
+    
     # Obtener profesores para el formulario
     profesores = Profesor.objects.all()
 
