@@ -27,8 +27,7 @@ Cursos
                 </option>
                 {% for profesor in profesores %}
                 <option value="{{ profesor.id }}">
-                    {{ profesor.usuario.first_name }}
-                    {{ profesor.usuario.last_name }}
+                    {{ profesor }}
                 </option>
                 {% endfor %}
             </select>
