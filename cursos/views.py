@@ -82,23 +82,60 @@ class ListaCursosView(
 
 
 # Vista basada en clases para mostrar el detalle de un curso
+# Vista basada en clases para mostrar la información detallada de un registro específico
+# Hereda de DetailView, la cual automatiza la búsqueda de un único objeto en la base de datos
 class CursoDetailView(DetailView):
 
     # Modelo que va a buscar Django automáticamente
+    # Conecta la vista con el modelo Curso para saber en qué tabla debe realizar la consulta
     model = Curso
 
     # Plantilla que mostrará los datos
+    # Define la ruta del archivo HTML que se encargará de estructurar la página de detalle del curso
     template_name = "cursos/detalle_curso.html"
 
     # Nombre de la variable que recibirá el HTML
+    # Renombra el objeto recuperado para que en la plantilla puedas usar {{ curso }} en vez de {{ object }}
     context_object_name = "curso"
 
-    # Campo del modelo que usará para buscar
-    # En vez de buscar por id, busca por slug
+    # Buscar por slug
+    # Indica a Django que busque el registro utilizando una columna de texto legible (slug) en lugar del ID numérico
     slug_field = "slug"
 
-    # Nombre del parámetro que viene desde urls.py
+    # Parámetro de la URL
+    # Define el nombre del parámetro exacto que Django debe capturar e identificar desde el archivo de rutas urls.py
     slug_url_kwarg = "slug"
+
+
+    # Añade datos extra al contexto del HTML
+    # Método encargado de inyectar variables adicionales que no forman parte directa de las columnas del modelo
+    def get_context_data(
+        self,
+        **kwargs
+    ):
+
+        # Obtiene el contexto normal de DetailView
+        # Ejecuta la lógica original de la clase padre para mantener el objeto 'curso' precargado en el diccionario
+        context = super().get_context_data(
+            **kwargs
+        )
+
+
+        # Obtiene el curso que ya encontró Django
+        # Recupera la instancia del curso actual que DetailView localizó en la base de datos tras procesar la URL
+        curso = self.object
+
+
+        # Cuenta cuántas matrículas tiene ese curso
+        # Genera una nueva variable de contexto llamada 'ocupadas' que almacena el cálculo de alumnos inscritos en este instante
+        context["ocupadas"] = (
+            curso.matriculas.count()
+        )
+
+
+        # Devuelve el diccionario completo de datos que la plantilla HTML utilizará para pintar la pantalla
+        return context
+
 
 # Vista basada en clases para crear nuevos cursos
 # Hereda de CreateView para automatizar la generación, renderizado y validación del formulario de creación
