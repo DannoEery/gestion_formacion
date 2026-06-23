@@ -1,0 +1,31 @@
+{# HERENCIA GLOBAL: Conecta esta plantilla con el diseño maestro de tu aplicación para mantener la misma cabecera, barras y estilos generales #}
+{% extends 'base.html' %}
+
+{# ESPACIO DE CONTENIDO: Delimita la zona donde se inyectará el formulario dentro de la estructura general definida por 'base.html' #}
+{% block content %}
+
+<!-- TÍTULO DE LA PÁGINA: Texto principal que indica al usuario que se encuentra en la pantalla de alta de materias -->
+<h1>
+    Nuevo Curso
+</h1>
+
+<!-- FORMULARIO HTML: 
+     - method="post": Método seguro para enviar datos al servidor que modifican la base de datos.
+     - enctype="multipart/form-data": Codificación obligatoria para que Django pueda recibir archivos físicos (como la imagen del curso) -->
+<form method="post" enctype="multipart/form-data">
+
+    {# FICHA DE SEGURIDAD (Cross-Site Request Forgery): Genera un código oculto obligatorio en Django para verificar que el formulario fue enviado de forma legítima y prevenir ataques maliciosos de suplantación #}
+    {% csrf_token %}
+
+    {# RENDERIZADO AUTOMÁTICO: Django toma la lista 'fields' de la vista, crea los inputs correspondientes y los envuelve dentro de etiquetas de párrafo (<p>) automáticamente con sus textos explicativos (labels) #}
+    {{ form.as_p }}
+
+    <!-- BOTÓN DE ENVÍO: Elemento de tipo 'submit' por defecto. La clase 'btn btn-success' aplica los estilos de Bootstrap para mostrar un botón de color verde -->
+    <button class="btn btn-success">
+        Guardar
+    </button>
+
+</form>
+
+{# FIN DE BLOQUE: Indica a Django que este es el final de la estructura específica del formulario de creación #}
+{% endblock %}
