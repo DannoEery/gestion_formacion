@@ -3,7 +3,7 @@ from django.urls import path
 
 from .views import (
     ListaCursosView,
-    detalle_curso
+    CursoDetailView
 )
 # Importa las vistas:
 # ListaCursosView -> lista de cursos con CBV
@@ -26,12 +26,7 @@ urlpatterns = [
 
     path(
         '<slug:slug>/',
-        # URL SEO:
-        # ejemplo /cursos/python-basico/
-
-        detalle_curso,
-        # Vista del detalle
-
+        CursoDetailView.as_view(),
         name='detalle_curso'
-    ),
+)   ,
 ]
