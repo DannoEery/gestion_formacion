@@ -3,7 +3,7 @@ from .views import matricularse
 from .views import (
     matricularse,
     mis_cursos,
-    dashboard,
+    DashboardAlumnoView,
     cancelar_matricula
 )
 
@@ -22,7 +22,7 @@ urlpatterns = [
     ),
     path(
         'dashboard/',
-        dashboard,
+        DashboardAlumnoView.as_view(),
         name='dashboard'
     ),
 
