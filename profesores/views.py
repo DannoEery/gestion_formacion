@@ -1,9 +1,12 @@
 # Importa la función render para generar plantillas HTML con datos de contexto
 from django.shortcuts import render
+
 # Importa el modelo Curso para realizar consultas a la base de datos de cursos
 from cursos.models import Curso
+
 # Importa el modelo Matricula para gestionar las inscripciones de los estudiantes
 from matriculas.models import Matricula
+
 # Importa el decorador personalizado que creamos para restringir el acceso a profesores
 from usuarios.decorators import profesor_required
 
@@ -18,26 +21,15 @@ def dashboard_profesor(request):
     profesor = request.user.profesor
 
     # Cursos del profesor + alumnos de esos cursos
-    cursos = (
-        Curso.objects
-        .filter(
-            profesor=profesor
-        )
-        .prefetch_related(
-            'matriculas__alumno'
-        )
+    cursos = Curso.objects.filter(profesor=profesor).prefetch_related(
+        "matriculas__alumno"
     )
 
     # Cuenta la cantidad total de cursos que tiene este profesor
     total_cursos = cursos.count()
 
     # Cuenta las matrículas activas en los cursos que dicta este profesor
-    total_alumnos = (
-        Matricula.objects.filter(
-            curso__profesor=profesor
-        ).count()
-    )
-
+    total_alumnos = Matricula.objects.filter(curso__profesor=profesor).count()
 
     # Busca el curso más popular del profesor
     # Cuenta cuántas matrículas tiene cada curso
@@ -45,34 +37,30 @@ def dashboard_profesor(request):
     # Selecciona el primero
 
     cursos = (
-    Curso.objects
-    .filter(
-        profesor=profesor
+        Curso.objects.filter(profesor=profesor)
+        .annotate(total_alumnos=Count("matriculas"))
+        .order_by("-total_alumnos")
+        .prefetch_related("matriculas__alumno")
     )
-    .annotate(
-        total_alumnos=Count(
-            'matriculas'
-        )
+    curso_popular = (
+        Curso.objects.filter(profesor=profesor)
+        .annotate(total=Count("matriculas"))
+        .order_by("-total")
+        .first()
     )
-    .order_by(
-        '-total_alumnos'
-    )
-    .prefetch_related(
-        'matriculas__alumno'
-    )
-)
 
     # Renderiza la plantilla HTML enviando las estadísticas calculadas
     return render(
         request,
-        'profesores/dashboard.html',
+        "profesores/dashboard.html",
         {
-            'total_cursos': total_cursos,
-            'total_alumnos': total_alumnos,
-            'cursos': cursos,
-            'curso_popular': curso_popular,
-        }
+            "total_cursos": total_cursos,
+            "total_alumnos": total_alumnos,
+            "cursos": cursos,
+            "curso_popular": curso_popular,
+        },
     )
+
 
 # Aplica el decorador para asegurar que solo los profesores accedan a esta vista
 @profesor_required
@@ -84,24 +72,19 @@ def mis_cursos_profesor(request):
         # Accede al gestor de la base de datos del modelo Curso para iniciar la consulta
         Curso.objects
         # Filtra los registros para traer únicamente los cursos que pertenecen al perfil del profesor actual
-        .filter(
-            profesor=request.user.profesor
-        )
+        .filter(profesor=request.user.profesor)
         # Crea un campo virtual temporal llamado 'total_alumnos' que se calcula directamente en la base de datos
         .annotate(
             # Utiliza la función de agregación Count para contar cuántas matrículas están asociadas a cada curso
-            total_alumnos=Count(
-                'matriculas'
-            )
+            total_alumnos=Count("matriculas")
         )
     )
     # Renderiza la plantilla HTML enviando el listado completo de cursos optimizado
     return render(
         request,
-        'profesores/mis_cursos.html',
+        "profesores/mis_cursos.html",
         {
             # Pasa la lista de cursos como contexto para poder iterarla en el HTML
-            'cursos': cursos
-        }
+            "cursos": cursos
+        },
     )
-
