@@ -67,8 +67,14 @@ class ListaCursosView(
     def get_queryset(self):
 
         # Obtiene solamente cursos activos
-        queryset = Curso.objects.filter(activo=True)
-
+        queryset = (
+            Curso.objects
+            .filter(
+                activo=True
+                ).select_related(
+                    "profesor"
+                )
+        )
         # Recoge el texto escrito en el buscador
         buscar = self.request.GET.get("buscar", "")
 
@@ -77,6 +83,13 @@ class ListaCursosView(
 
             queryset = queryset.filter(nombre__icontains=buscar)
 
+        profesor = self.request.GET.get(
+            "profesor"
+        )
+        if profesor:
+            queryset = queryset.filter(
+                profesor__id=profesor
+            )
         # Devuelve la consulta final
         return queryset
 
