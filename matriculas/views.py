@@ -4,6 +4,10 @@ from django.contrib import messages
 from cursos.models import Curso
 from .models import Matricula
 from django.db.models import Count
+from django.views.generic import TemplateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+from .models import Matricula
 
 
 # =========================================================================
