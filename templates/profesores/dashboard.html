@@ -1,0 +1,56 @@
+{# Hereda la estructura, estilos y menús globales definidos en la plantilla base #}
+{% extends 'base.html' %}
+
+{# Define un bloque específico para cambiar el título de la pestaña del navegador #}
+{% block title %}
+Dashboard Profesor
+{% endblock %}
+
+{# Define el bloque principal donde se renderizará el contenido de esta página #}
+{% block content %}
+<!-- Título principal visible en la parte superior del panel del profesor -->
+<h1>
+    Panel Profesor
+</h1>
+
+<!-- Contenedor de fila de Bootstrap para organizar las tarjetas en columnas -->
+<div class="row">
+
+    <!-- Columna que ocupa la mitad del ancho de la pantalla en dispositivos medianos y grandes -->
+    <div class="col-md-6">
+        <!-- Tarjeta contenedora de Bootstrap para mostrar la primera estadística -->
+        <div class="card">
+            <!-- Contenedor interno que aplica relleno (padding) a los elementos de la tarjeta -->
+            <div class="card-body">
+                <!-- Etiqueta del contador de cursos -->
+                <h5>
+                    Cursos impartidos
+                </h5>
+                <!-- Muestra de forma dinámica la variable enviada por la vista con el total de cursos -->
+                <h2>
+                    {{ total_cursos }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Segunda columna para la siguiente tarjeta estadística (ocupa la otra mitad del ancho) -->
+    <div class="col-md-6">
+        <!-- Tarjeta contenedora de Bootstrap para mostrar la segunda estadística -->
+        <div class="card">
+            <!-- Contenedor interno para el relleno y espaciado de los elementos -->
+            <div class="card-body">
+                <!-- Etiqueta del contador de estudiantes -->
+                <h5>
+                    Alumnos matriculados
+                </h5>
+                <!-- Muestra de forma dinámica la variable enviada por la vista con el total de alumnos -->
+                <h2>
+                    {{ total_alumnos }}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
