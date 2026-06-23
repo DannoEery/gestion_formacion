@@ -67,32 +67,36 @@ class ListaCursosView(
     def get_queryset(self):
 
         # Obtiene solamente cursos activos
-        queryset = (
-            Curso.objects
-            .filter(
-                activo=True
-                ).select_related(
-                    "profesor"
-                )
-        )
+        queryset = Curso.objects.filter(activo=True)
+
         # Recoge el texto escrito en el buscador
-        buscar = self.request.GET.get("buscar", "")
+        buscar = self.request.GET.get("buscar")
 
         # Si el usuario escribió algo, filtra
         if buscar:
 
             queryset = queryset.filter(nombre__icontains=buscar)
 
-        profesor = self.request.GET.get(
-            "profesor"
-        )
-        if profesor:
-            queryset = queryset.filter(
-                profesor__id=profesor
-            )
+        # Recoge el texto escrito en el buscador
+        profesor_id = self.request.GET.get("profesor")
+
+        # Si el usuario escribió algo, filtra
+        if profesor_id:
+
+            queryset = queryset.filter(profesor_id=profesor_id)
+
+
+        
+
         # Devuelve la consulta final
         return queryset
+    def get_context_data(self, **kwargs):
 
+        context = super().get_context_data(**kwargs)
+
+        context["profesores"] = Profesor.objects.all()
+
+        return context
 
 # Vista basada en clases para mostrar el detalle de un curso
 # Vista basada en clases para mostrar la información detallada de un registro específico
