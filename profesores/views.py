@@ -44,20 +44,23 @@ def dashboard_profesor(request):
     # Ordena de mayor número de alumnos a menor
     # Selecciona el primero
 
-    curso_popular = (
-        Curso.objects.filter(
-            profesor=profesor
-        )
-        .annotate(
-            total=Count(
-                'matriculas'
-            )
-        )
-        .order_by(
-            '-total'
-        )
-        .first()
+    cursos = (
+    Curso.objects
+    .filter(
+        profesor=profesor
     )
+    .annotate(
+        total_alumnos=Count(
+            'matriculas'
+        )
+    )
+    .order_by(
+        '-total_alumnos'
+    )
+    .prefetch_related(
+        'matriculas__alumno'
+    )
+)
 
     # Renderiza la plantilla HTML enviando las estadísticas calculadas
     return render(
