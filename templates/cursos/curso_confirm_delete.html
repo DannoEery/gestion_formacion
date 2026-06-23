@@ -1,0 +1,28 @@
+{# HERENCIA GLOBAL: Integra esta página dentro del diseño maestro de la aplicación para conservar los menús y el pie de
+página común #}
+{% extends 'base.html' %}
+
+{# ESPACIO DE CONTENIDO: Delimita el bloque específico que sustituirá al contenedor principal definido en 'base.html' #}
+{% block content %}
+<!-- TÍTULO DE LA PÁGINA: Encabezado principal que advierte al usuario sobre la acción crítica que se va a realizar -->
+<h1>
+    Eliminar Curso
+</h1>
+
+<!-- FORMULARIO DE CONFIRMACIÓN:
+     - method="post": Obligatorio en Django para la eliminación segura, evitando que se borren datos accidentalmente mediante una simple petición GET de enlace -->
+<form method="post">
+    {# TOKEN DE SEGURIDAD (CSRF): Genera la clave de verificación única y oculta para proteger al servidor contra
+    ataques de falsificación de peticiones #}
+    {% csrf_token %}
+    <p>
+        <!-- MENSAJE DE ADVERTENCIA: Texto en texto plano que le solicita al usuario confirmar su decisión antes de proceder -->
+        ¿Desea eliminar este curso?
+    </p>
+    <!-- BOTÓN DE CONFIRMACIÓN: Envía el formulario (POST). La clase 'btn btn-danger' aplica los estilos de Bootstrap para darle un color rojo de advertencia -->
+    <button class="btn btn-danger">
+        Eliminar
+    </button>
+</form>
+{# FIN DE BLOQUE: Finaliza la sección de código correspondiente a la confirmación de borrado #}
+{% endblock %}
