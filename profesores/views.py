@@ -66,6 +66,8 @@ def dashboard_profesor(request):
         {
             'total_cursos': total_cursos,
             'total_alumnos': total_alumnos,
+            'cursos': cursos,
+            'curso_popular': curso_popular,
         }
     )
 
