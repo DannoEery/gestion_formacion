@@ -39,3 +39,30 @@ def dashboard_profesor(request):
             'total_alumnos': total_alumnos,
         }
     )
+
+# Aplica el decorador para asegurar que solo los profesores accedan a esta vista
+@profesor_required
+def mis_cursos_profesor(request):
+
+    # Realiza la consulta a la base de datos aplicando un filtro y una optimización
+    cursos = (
+        # Filtra los cursos que pertenecen al perfil del profesor actual
+        Curso.objects.filter(
+            profesor=request.user.profesor
+        )
+        # Optimiza la consulta cargando de golpe las matrículas relacionadas (evita el problema de consultas N+1)
+        .prefetch_related(
+            'matriculas'
+        )
+    )
+
+    # Renderiza la plantilla HTML enviando el listado completo de cursos optimizado
+    return render(
+        request,
+        'profesores/mis_cursos.html',
+        {
+            # Pasa la lista de cursos como contexto para poder iterarla en el HTML
+            'cursos': cursos
+        }
+    )
+
