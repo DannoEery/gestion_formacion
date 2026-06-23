@@ -17,7 +17,7 @@ Dashboard Profesor
 <div class="row">
 
     <!-- Columna que ocupa la mitad del ancho de la pantalla en dispositivos medianos y grandes -->
-    <div class="col-md-6">
+    <div class="col-md-4">
         <!-- Tarjeta contenedora de Bootstrap para mostrar la primera estadística -->
         <div class="card">
             <!-- Contenedor interno que aplica relleno (padding) a los elementos de la tarjeta -->
@@ -35,7 +35,7 @@ Dashboard Profesor
     </div>
 
     <!-- Segunda columna para la siguiente tarjeta estadística (ocupa la otra mitad del ancho) -->
-    <div class="col-md-6">
+    <div class="col-md-4">
         <!-- Tarjeta contenedora de Bootstrap para mostrar la segunda estadística -->
         <div class="card">
             <!-- Contenedor interno para el relleno y espaciado de los elementos -->
@@ -51,6 +51,33 @@ Dashboard Profesor
             </div>
         </div>
     </div>
-
+    <!-- =========================
+         ALUMNOS POR CURSO
+    ========================= -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5>
+                    Alumnos por curso
+                </h5>
+                {% for curso in cursos %}
+                <strong>
+                    {{ curso.nombre }}
+                </strong>
+                <ul>
+                    {% for matricula in curso.matriculas.all %}
+                    <li>
+                        {{ matricula.alumno.username }}
+                    </li>
+                    {% empty %}
+                    <li>
+                        Sin alumnos
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
