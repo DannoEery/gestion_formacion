@@ -31,9 +31,8 @@ from django.views.generic import (
     # Se usa para renderizar y procesar un formulario que edita un registro existente (ej: modificar un curso)
     UpdateView,
     # Se usa para gestionar la confirmación y el proceso de borrado de un registro (ej: eliminar un curso)
-    DeleteView
+    DeleteView,
 )
-
 
 
 # Nueva versión: Define la vista utilizando programación orientada a objetos heredando de ListView
@@ -43,17 +42,13 @@ class ListaCursosView(
 ):
     # Indica a Django de qué tabla de la base de datos debe extraer los registros de forma automática
     model = Curso
-    
+
     # Define la ruta exacta de la plantilla HTML que se encargará de renderizar la página
-    template_name = (
-        'cursos/lista_cursos.html'
-    )
-    
+    template_name = "cursos/lista_cursos.html"
+
     # Renombra la variable que se enviará al HTML para que la recorras como 'cursos' en vez de 'object_list'
-    context_object_name = (
-        'cursos'
-    )
-    
+    context_object_name = "cursos"
+
     # Activa la paginación automática dividiendo el listado en grupos de máximo 6 registros por pantalla
     paginate_by = 6
 
@@ -61,36 +56,35 @@ class ListaCursosView(
     def get_queryset(self):
 
         # Obtiene solamente cursos activos
-        queryset = Curso.objects.filter(
-            activo=True
-        )
-
+        queryset = Curso.objects.filter(activo=True)
 
         # Recoge el texto escrito en el buscador
-        buscar = self.request.GET.get(
-            "buscar",
-            ""
-        )
-
+        buscar = self.request.GET.get("buscar", "")
 
         # Si el usuario escribió algo, filtra
         if buscar:
 
-            queryset = queryset.filter(
-                nombre__icontains=buscar
-            )
-
+            queryset = queryset.filter(nombre__icontains=buscar)
 
         # Devuelve la consulta final
         return queryset
 
 
-def detalle_curso(request, slug):
+# Vista basada en clases para mostrar el detalle de un curso
+class CursoDetailView(DetailView):
 
-    curso = get_object_or_404(Curso, slug=slug, activo=True)
+    # Modelo que va a buscar Django automáticamente
+    model = Curso
 
-    ocupadas = curso.matriculas.count()
+    # Plantilla que mostrará los datos
+    template_name = "cursos/detalle_curso.html"
 
-    return render(
-        request, "cursos/detalle_curso.html", {"curso": curso, "ocupadas": ocupadas}
-    )
+    # Nombre de la variable que recibirá el HTML
+    context_object_name = "curso"
+
+    # Campo del modelo que usará para buscar
+    # En vez de buscar por id, busca por slug
+    slug_field = "slug"
+
+    # Nombre del parámetro que viene desde urls.py
+    slug_url_kwarg = "slug"
