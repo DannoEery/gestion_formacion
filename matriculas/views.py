@@ -88,65 +88,43 @@ def mis_cursos(request):
     return render(request, "matriculas/mis_cursos.html", {"matriculas": matriculas})
 
 
-# Decorador que asegura que solo los usuarios autenticados puedan acceder a esta vista.
-# Si un usuario no ha iniciado sesión, será redirigido a la página de login.
-@login_required
-def dashboard(request):
-
-    # Obtiene el número total de matrículas que tiene el usuario actual.
-    # Filtra en la base de datos por el campo 'alumno' usando el usuario de la sesión.
-    total_matriculas = Matricula.objects.filter(alumno=request.user).count()
-
-    # Obtiene la matrícula más reciente realizada por el usuario.
-    # Filtra por el usuario actual y usa 'select_related' para traer la información
-    # del curso asociado en una sola consulta a la base de datos (optimización).
-    # Ordena por fecha de matrícula de forma descendente (-) y toma el primer resultado (.first()).
-    ultima_matricula = (
-        Matricula.objects.filter(alumno=request.user)
-        .select_related("curso", "curso__profesor", "curso__profesor__usuario")
-        .order_by("-fecha_matricula")
-        .first()
+# Define la vista para el panel de control del estudiante usando programación orientada a objetos
+class DashboardAlumnoView(
+    # PRIMER FILTRO DE SEGURIDAD: Obliga a que el usuario haya iniciado sesión antes de poder continuar
+    LoginRequiredMixin,
+    # TIPO DE VISTA: Hereda de TemplateView, ideal para páginas estáticas o paneles que solo muestran datos sin procesar formularios
+    TemplateView
+):
+    # Indica de forma explícita la ruta de la plantilla HTML que se encargará de pintar la interfaz del alumno
+    template_name = (
+        'matriculas/dashboard.html'
     )
+    
+    # Método encargado de recolectar y enviar variables dinámicas (contexto) hacia el archivo HTML
+    def get_context_data(
+        self,
+        **kwargs
+    ):
+        # Ejecuta el método original de la clase padre para heredar el diccionario de contexto base de Django
+        context = super().get_context_data(
+            **kwargs
+        )
+        
+        # Inyecta una nueva variable llamada 'total_matriculas' dentro del diccionario para enviarla al HTML
+        context[
+            'total_matriculas'
+        ] = (
+            # Accede al modelo Matricula y filtra los registros en la base de datos
+            Matricula.objects.filter(
+                # Busca únicamente las inscripciones asociadas al alumno (usuario que hace la petición)
+                alumno=self.request.user
+            # Cuenta el número total de filas encontradas para este estudiante específico
+            ).count()
+        )
+        
+        # Devuelve el diccionario de datos ya actualizado y listo para que la plantilla lo renderice
+        return context
 
-    # Obtiene el próximo curso que va a iniciar el usuario, basándose en sus matrículas.
-    # Filtra los cursos que tienen matrículas asociadas al usuario actual.
-    # Ordena los resultados por la fecha de inicio de forma ascendente para encontrar el más cercano.
-    # Toma el primer resultado de la lista.
-    proximo_curso = (
-        Curso.objects.filter(matriculas__alumno=request.user)
-        .order_by("fecha_inicio")
-        .first()
-    )
-
-    ultimas_matriculas = (
-        Matricula.objects.filter(alumno=request.user)
-        .select_related("curso", "curso__profesor", "curso__profesor__usuario")
-        .order_by("-fecha_matricula")[:5]
-    )
-
-    # ===========================
-    # CURSOS DISPONIBLES
-    # ===========================
-
-    cursos_disponibles = (
-        Curso.objects.filter(
-            activo=True
-        ).count()
-    )
-
-    # Renderiza la plantilla HTML especificada y le pasa las variables calculadas
-    # en un diccionario (contexto) para que puedan mostrarse en el navegador.
-    return render(
-        request,
-        "matriculas/dashboard.html",
-        {
-            "total_matriculas": total_matriculas,
-            "ultima_matricula": ultima_matricula,
-            "proximo_curso": proximo_curso,
-            "ultimas_matriculas": ultimas_matriculas,
-            'cursos_disponibles': cursos_disponibles
-        },
-    )
 
 
 # Decorador que restringe el acceso solo a usuarios autenticados.

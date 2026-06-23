@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 # render: permite devolver una plantilla HTML con datos
 # get_object_or_404: obtiene un objeto o lanza error 404 si no existe
 
+
 from .models import Curso
 
 # Importa el modelo Curso desde la app actual
@@ -181,8 +182,7 @@ class CursoUpdateView(
 class CursoDeleteView(
     LoginRequiredMixin,
     ProfesorMixin,
-    DeleteView
-    ):
+    DeleteView):
 
     # Modelo que vamos a eliminar
     # Conecta la vista con la tabla Curso para indicarle a Django de dónde debe remover el registro
