@@ -3,6 +3,7 @@ from datetime import datetime, time, timedelta
 from django.utils import timezone
 from django.utils.html import format_html
 from .models import Curso
+from django.db.models import Count
 
 # 🔍 Filtro temporal personalizado
 # Se hereda de SimpleListFilter para crear una barra de filtrado lateral propia en el panel de administración
@@ -108,7 +109,18 @@ class FiltroFechas(admin.SimpleListFilter):
 @admin.register(Curso)
 class CursoAdmin(admin.ModelAdmin):
     # Columnas que se mostrarán ordenadas en forma de tabla en la vista de lista general
-    list_display = ('miniatura', 'nombre', 'profesor', 'fecha_inicio', 'fecha_fin', 'activo',)
+    list_display = (
+    'miniatura',
+    'nombre',
+    'profesor',
+    'alumnos',
+    'activo',
+)
+
+    # Permite activar/desactivar cursos directamente desde la tabla del admin
+    list_editable = (
+        'activo',
+    )
     
     # Habilita una barra de búsqueda superior que busca coincidencias de texto en estos campos específicos.
     # Los dos últimos usan '__' para acceder a atributos del modelo relacionado (Relación ForeignKey del Profesor)
@@ -151,3 +163,12 @@ class CursoAdmin(admin.ModelAdmin):
         
     # Cambia el título de la columna en la tabla del panel de administración (por defecto usaría el nombre del método)
     miniatura.short_description = 'Imagen'
+
+    # Muestra cuántos alumnos están matriculados en cada curso
+    def alumnos(self, obj):
+
+        return obj.matriculas.count()
+
+
+    # Nombre que aparece como cabecera en el administrador
+    alumnos.short_description = 'Alumnos'
