@@ -1,0 +1,48 @@
+{# Hereda la estructura, menús y estilos globales definidos en la plantilla base #}
+{% extends 'base.html' %}
+
+{# Define el bloque de contenido principal que se insertará en la plantilla base #}
+{% block content %}
+<!-- Título principal de la sección de cursos -->
+<h1>
+    Mis Cursos
+</h1>
+
+<!-- Estructura de tabla de Bootstrap para organizar el listado de cursos -->
+<table class="table">
+    <!-- Encabezado de la tabla que define los títulos de las columnas -->
+    <thead>
+        <tr>
+            <!-- Columna para el título o nombre del curso -->
+            <th>Curso</th>
+            <!-- Columna para el cupo máximo o plazas totales disponibles -->
+            <th>Plazas</th>
+            <!-- Columna para el número actual de estudiantes inscritos -->
+            <th>Matriculados</th>
+        </tr>
+    </thead>
+
+    <!-- Cuerpo de la tabla donde se mostrarán los datos de cada curso -->
+    <tbody>
+        {# Bucle de Django que recorre uno a uno los cursos enviados desde la vista #}
+        {% for curso in cursos %}
+        <tr>
+            <td>
+                <!-- Muestra de forma dinámica el nombre del curso actual en la fila -->
+                {{ curso.nombre }}
+            </td>
+            <td>
+
+                <!-- Muestra de forma dinámica la capacidad total de plazas del curso -->
+                {{ curso.plazas }}
+            </td>
+            <td>
+                <!-- Calcula y muestra en tiempo real el total de alumnos inscritos en este curso -->
+                {{ curso.matriculas.count }}
+            </td>
+        </tr>
+        {# Finaliza el bucle de renderizado de la lista de cursos #}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
