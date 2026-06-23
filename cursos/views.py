@@ -42,6 +42,11 @@ from django.contrib.auth.mixins import (
     # Es el equivalente en clases al decorador de funciones @login_required
     LoginRequiredMixin
 )
+# Importa el mixin personalizado que acabamos de crear para el control de accesos
+from profesores.mixin import (
+    # Esta clase se encargará de validar que el usuario tenga el rol de 'profesor' antes de permitirle ver la vista
+    ProfesorMixin
+)
 
 
 
@@ -102,7 +107,11 @@ class CursoDetailView(DetailView):
 
 # Vista basada en clases para crear nuevos cursos
 # Hereda de CreateView para automatizar la generación, renderizado y validación del formulario de creación
-class CursoCreateView(CreateView):
+class CursoCreateView(
+    LoginRequiredMixin,
+    ProfesorMixin,
+    CreateView
+):
 
     # Modelo que se va a crear
     # Conecta la vista con el modelo Curso para saber qué tabla debe recibir los datos insertados
@@ -137,7 +146,11 @@ class CursoCreateView(CreateView):
 
 # Vista basada en clases para modificar la información de un registro existente
 # Hereda de UpdateView, la cual precarga automáticamente los datos del objeto en el formulario usando el ID de la URL
-class CursoUpdateView(UpdateView):
+class CursoUpdateView(
+    LoginRequiredMixin,
+    ProfesorMixin,
+    UpdateView
+):
 
     # Modelo que vamos a modificar
     # Vincula la vista con el modelo Curso para saber qué tabla de la base de datos se va a actualizar
@@ -171,7 +184,11 @@ class CursoUpdateView(UpdateView):
 
 # Vista basada en clases para borrar un registro de manera definitiva de la base de datos
 # Hereda de DeleteView, encargada de verificar la existencia del objeto y gestionar el POST de confirmación
-class CursoDeleteView(DeleteView):
+class CursoDeleteView(
+    LoginRequiredMixin,
+    ProfesorMixin,
+    DeleteView
+    ):
 
     # Modelo que vamos a eliminar
     # Conecta la vista con la tabla Curso para indicarle a Django de dónde debe remover el registro
