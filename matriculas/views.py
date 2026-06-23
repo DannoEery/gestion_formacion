@@ -12,33 +12,64 @@ from django.db.models import Count
 @login_required
 def matricularse(request, curso_id):
 
-    curso = get_object_or_404(Curso, id=curso_id, activo=True)
+    curso = get_object_or_404(
+        Curso,
+        id=curso_id,
+        activo=True
+    )
 
-    # Solo alumnos
+
     if request.user.tipo != "alumno":
 
-        messages.error(request, "Sólo los alumnos pueden matricularse.")
+        messages.error(
+            request,
+            "Sólo los alumnos pueden matricularse."
+        )
 
-        return redirect("detalle_curso", curso_id=curso.id)
+        return redirect(
+            "detalle_curso",
+            slug=curso.slug
+        )
+
 
     inscritos = curso.matriculas.count()
 
+
     if inscritos >= curso.plazas:
 
-        messages.error(request, "No quedan plazas.")
+        messages.error(
+            request,
+            "No quedan plazas."
+        )
 
-        return redirect("detalle_curso", curso_id=curso.id)
+        return redirect(
+            "detalle_curso",
+            slug=curso.slug
+        )
+
 
     matricula, creada = Matricula.objects.get_or_create(
-        alumno=request.user, curso=curso
+        alumno=request.user,
+        curso=curso
     )
 
-    if creada:
-        messages.success(request, "Matrícula realizada correctamente.")
-    else:
-        messages.warning(request, "Ya estás matriculado en este curso.")
 
-    return redirect("detalle_curso", curso_id=curso.id)
+    if creada:
+        messages.success(
+            request,
+            "Matrícula realizada correctamente."
+        )
+    else:
+        messages.warning(
+            request,
+            "Ya estás matriculado en este curso."
+        )
+
+
+    return redirect(
+        "detalle_curso",
+        slug=curso.slug
+    )
 
 # =========================================================================
 # VISTA: MIS CURSOS
