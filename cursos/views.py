@@ -37,6 +37,13 @@ from django.views.generic import (
 # Importa la versión "perezosa" (lazy) del resolvedor de URLs de Django
 from django.urls import reverse_lazy
 
+# Importa el "Mixin" encargado de restringir el acceso a usuarios no autenticados
+from django.contrib.auth.mixins import (
+    # Es el equivalente en clases al decorador de funciones @login_required
+    LoginRequiredMixin
+)
+
+
 
 
 # Nueva versión: Define la vista utilizando programación orientada a objetos heredando de ListView
