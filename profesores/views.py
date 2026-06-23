@@ -7,6 +7,8 @@ from matriculas.models import Matricula
 # Importa el decorador personalizado que creamos para restringir el acceso a profesores
 from usuarios.decorators import profesor_required
 
+from django.db.models import Count
+
 
 # Aplica el decorador para asegurar que solo los profesores accedan a esta vista
 @profesor_required
@@ -45,17 +47,22 @@ def dashboard_profesor(request):
 def mis_cursos_profesor(request):
 
     # Realiza la consulta a la base de datos aplicando un filtro y una optimización
+    # Realiza la consulta a la base de datos aplicando un filtro y un cálculo agregado eficiente
     cursos = (
-        # Filtra los cursos que pertenecen al perfil del profesor actual
-        Curso.objects.filter(
+        # Accede al gestor de la base de datos del modelo Curso para iniciar la consulta
+        Curso.objects
+        # Filtra los registros para traer únicamente los cursos que pertenecen al perfil del profesor actual
+        .filter(
             profesor=request.user.profesor
         )
-        # Optimiza la consulta cargando de golpe las matrículas relacionadas (evita el problema de consultas N+1)
-        .prefetch_related(
-            'matriculas'
+        # Crea un campo virtual temporal llamado 'total_alumnos' que se calcula directamente en la base de datos
+        .annotate(
+            # Utiliza la función de agregación Count para contar cuántas matrículas están asociadas a cada curso
+            total_alumnos=Count(
+                'matriculas'
+            )
         )
     )
-
     # Renderiza la plantilla HTML enviando el listado completo de cursos optimizado
     return render(
         request,
