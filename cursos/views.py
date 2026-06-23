@@ -157,3 +157,25 @@ class CursoUpdateView(UpdateView):
     success_url = reverse_lazy(
         "lista_cursos"
     )
+
+# ==========================
+# ELIMINAR CURSO
+# ==========================
+
+# Vista basada en clases para borrar un registro de manera definitiva de la base de datos
+# Hereda de DeleteView, encargada de verificar la existencia del objeto y gestionar el POST de confirmación
+class CursoDeleteView(DeleteView):
+
+    # Modelo que vamos a eliminar
+    # Conecta la vista con la tabla Curso para indicarle a Django de dónde debe remover el registro
+    model = Curso
+
+    # Plantilla de confirmación
+    # Define el archivo HTML de seguridad donde se le preguntará al usuario si está seguro de proceder con el borrado
+    template_name = "cursos/curso_confirm_delete.html"
+
+    # Después de eliminar vuelve al listado
+    # Utiliza reverse_lazy para retrasar la resolución de la URL hasta que la eliminación se ejecute con éxito
+    success_url = reverse_lazy(
+        "lista_cursos"
+    )
