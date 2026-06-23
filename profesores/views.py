@@ -32,6 +32,27 @@ def dashboard_profesor(request):
         ).count()
     )
 
+
+    # Busca el curso más popular del profesor
+    # Cuenta cuántas matrículas tiene cada curso
+    # Ordena de mayor número de alumnos a menor
+    # Selecciona el primero
+
+    curso_popular = (
+        Curso.objects.filter(
+            profesor=profesor
+        )
+        .annotate(
+            total=Count(
+                'matriculas'
+            )
+        )
+        .order_by(
+            '-total'
+        )
+        .first()
+    )
+
     # Renderiza la plantilla HTML enviando las estadísticas calculadas
     return render(
         request,
