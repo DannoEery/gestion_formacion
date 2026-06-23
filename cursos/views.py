@@ -34,6 +34,10 @@ from django.views.generic import (
     DeleteView,
 )
 
+# Importa la versión "perezosa" (lazy) del resolvedor de URLs de Django
+from django.urls import reverse_lazy
+
+
 
 # Nueva versión: Define la vista utilizando programación orientada a objetos heredando de ListView
 class ListaCursosView(
@@ -88,3 +92,34 @@ class CursoDetailView(DetailView):
 
     # Nombre del parámetro que viene desde urls.py
     slug_url_kwarg = "slug"
+
+# Vista basada en clases para crear nuevos cursos
+# Hereda de CreateView para automatizar la generación, renderizado y validación del formulario de creación
+class CursoCreateView(CreateView):
+
+    # Modelo que se va a crear
+    # Conecta la vista con el modelo Curso para saber qué tabla debe recibir los datos insertados
+    model = Curso
+
+    # Campos que aparecerán automáticamente en el formulario
+    # Define la lista exacta de columnas de la base de datos que se transformarán en campos de entrada HTML
+    fields = [
+        'nombre',
+        'descripcion',
+        'profesor',
+        'fecha_inicio',
+        'fecha_fin',
+        'plazas',
+        'activo',
+        'imagen'
+    ]
+
+    # Plantilla del formulario
+    # Indica el archivo HTML encargado de estructurar y mostrar el formulario en la pantalla del usuario
+    template_name = "cursos/curso_form.html"
+
+    # Cuando se cree correctamente vuelve al listado de cursos
+    # Utiliza reverse_lazy para posponer la búsqueda de la ruta hasta que el registro se guarde con éxito
+    success_url = reverse_lazy(
+        "lista_cursos"
+    )
