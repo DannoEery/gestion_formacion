@@ -123,3 +123,37 @@ class CursoCreateView(CreateView):
     success_url = reverse_lazy(
         "lista_cursos"
     )
+
+# ==========================
+# ACTUALIZAR CURSO
+# ==========================
+
+# Vista basada en clases para modificar la información de un registro existente
+# Hereda de UpdateView, la cual precarga automáticamente los datos del objeto en el formulario usando el ID de la URL
+class CursoUpdateView(UpdateView):
+
+    # Modelo que vamos a modificar
+    # Vincula la vista con el modelo Curso para saber qué tabla de la base de datos se va a actualizar
+    model = Curso
+
+    # Campos que podrá editar el usuario
+    # Define de forma explícita las columnas que se le permitirán sobreescribir al usuario (notarás que aquí se omitió 'profesor' e 'imagen')
+    fields = [
+        'nombre',
+        'descripcion',
+        'fecha_inicio',
+        'fecha_fin',
+        'plazas',
+        'activo'
+    ]
+
+    # Reutilizamos el mismo formulario
+    # que usamos para crear
+    # Apunta al mismo archivo HTML; Django es lo bastante inteligente como para rellenar los campos en vez de mostrarlos vacíos
+    template_name = "cursos/curso_form.html"
+
+    # Después de guardar vuelve al listado
+    # Utiliza reverse_lazy para recalcular la ruta de redirección en memoria una vez que los cambios se guarden con éxito
+    success_url = reverse_lazy(
+        "lista_cursos"
+    )
