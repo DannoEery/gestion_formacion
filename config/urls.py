@@ -77,6 +77,14 @@ urlpatterns = [
         include(
             'matriculas.urls')
     ),
+
+     # Define un prefijo de URL para agrupar todas las rutas del módulo de profesores
+    path(
+        # El texto que se antepondrá en el navegador (ej: ://tusitio.com)
+        'profesores/',
+        # Incluye de forma dinámica todas las rutas definidas dentro del archivo 'profesores.urls'
+        include('profesores.urls')
+    ),
 ]
 # Fin de las rutas globales del proyecto
 if settings.DEBUG:
