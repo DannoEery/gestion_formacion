@@ -20,9 +20,22 @@ def dashboard_profesor(request):
     # Obtiene el perfil de profesor asociado al usuario que hace la petición
     profesor = request.user.profesor
 
-    # Cursos del profesor + alumnos de esos cursos
-    cursos = Curso.objects.filter(profesor=profesor).prefetch_related(
-        "matriculas__alumno"
+    # Cursos del profesor + optimización:
+# select_related evita consultas extra al acceder a profesor y usuario del profesor
+# prefetch_related carga matrículas y alumnos en una consulta separada optimizada
+
+    cursos = (
+        Curso.objects
+        .select_related(
+            "profesor",
+            "profesor__usuario"
+        )
+        .filter(
+            profesor=profesor
+        )
+        .prefetch_related(
+            "matriculas__alumno"
+        )
     )
 
     # Cuenta la cantidad total de cursos que tiene este profesor
