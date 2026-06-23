@@ -1,37 +1,37 @@
 from django.urls import path
-# Importa la función path, que se usa para definir rutas (URLs) en Django
+# Importa la función path para crear URLs
 
 from .views import (
-    lista_cursos,
+    ListaCursosView,
     detalle_curso
 )
-# Importa las vistas que van a manejar las URLs:
-# - lista_cursos: muestra todos los cursos
-# - detalle_curso: muestra un curso concreto
+# Importa las vistas:
+# ListaCursosView -> lista de cursos con CBV
+# detalle_curso -> detalle de un curso
+
 
 urlpatterns = [
-    # Lista de rutas de la aplicación cursos
 
     path(
         '',
-        # Ruta vacía: página principal de la app cursos (/cursos/)
+        # Página principal de cursos
 
-        lista_cursos,
-        # Vista que se ejecuta para mostrar la lista de cursos
+        ListaCursosView.as_view(),
+        # Ejecuta la vista basada en clases
 
         name='lista_cursos'
-        # Nombre de la ruta para usar en templates ({% url 'lista_cursos' %})
+        # Nombre usado en templates
     ),
+
 
     path(
         '<slug:slug>/',
-        # Ruta dinámica: recibe un número entero como ID del curso
-        # Ejemplo: /cursos/3/
+        # URL SEO:
+        # ejemplo /cursos/python-basico/
 
         detalle_curso,
-        # Vista que muestra el detalle del curso seleccionado
+        # Vista del detalle
 
         name='detalle_curso'
-        # Nombre de la ruta para enlazarla desde templates
     ),
 ]

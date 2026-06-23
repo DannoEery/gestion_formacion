@@ -57,6 +57,32 @@ class ListaCursosView(
     # Activa la paginación automática dividiendo el listado en grupos de máximo 6 registros por pantalla
     paginate_by = 6
 
+    # Modifica la consulta antes de enviarla a la plantilla
+    def get_queryset(self):
+
+        # Obtiene solamente cursos activos
+        queryset = Curso.objects.filter(
+            activo=True
+        )
+
+
+        # Recoge el texto escrito en el buscador
+        buscar = self.request.GET.get(
+            "buscar",
+            ""
+        )
+
+
+        # Si el usuario escribió algo, filtra
+        if buscar:
+
+            queryset = queryset.filter(
+                nombre__icontains=buscar
+            )
+
+
+        # Devuelve la consulta final
+        return queryset
 
 
 def detalle_curso(request, slug):
