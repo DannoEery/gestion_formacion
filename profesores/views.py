@@ -21,21 +21,13 @@ def dashboard_profesor(request):
     profesor = request.user.profesor
 
     # Cursos del profesor + optimización:
-# select_related evita consultas extra al acceder a profesor y usuario del profesor
-# prefetch_related carga matrículas y alumnos en una consulta separada optimizada
+    # select_related evita consultas extra al acceder a profesor y usuario del profesor
+    # prefetch_related carga matrículas y alumnos en una consulta separada optimizada
 
     cursos = (
-        Curso.objects
-        .select_related(
-            "profesor",
-            "profesor__usuario"
-        )
-        .filter(
-            profesor=profesor
-        )
-        .prefetch_related(
-            "matriculas__alumno"
-        )
+        Curso.objects.select_related("profesor", "profesor__usuario")
+        .filter(profesor=profesor)
+        .prefetch_related("matriculas__alumno")
     )
 
     # Cuenta la cantidad total de cursos que tiene este profesor
@@ -50,7 +42,8 @@ def dashboard_profesor(request):
     # Selecciona el primero
 
     cursos = (
-        Curso.objects.filter(profesor=profesor)
+        Curso.objects.select_related("profesor", "profesor__usuario")
+        .filter(profesor=profesor)
         .annotate(total_alumnos=Count("matriculas"))
         .order_by("-total_alumnos")
         .prefetch_related("matriculas__alumno")
