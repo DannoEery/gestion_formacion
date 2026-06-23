@@ -81,12 +81,15 @@ class DashboardAlumnoView(LoginRequiredMixin, TemplateView):
         # Últimas matrículas
         context["ultimas_matriculas"] = matriculas.order_by("-fecha_matricula")[:5]
 
-        # Próximo curso por fecha de inicio
-        context["proximo_curso"] = (
-            matriculas.filter(curso__fecha_inicio__gte=timezone.now().date())
-            .order_by("curso__fecha_inicio")
-            .first()
-        )
+        # Próximo curso que empieza más cerca de la fecha actual
+        context[
+            'proximo_curso'
+        ] = Curso.objects.filter(
+            activo=True,
+            fecha_inicio__gte=timezone.now().date()
+        ).order_by(
+            'fecha_inicio'
+        ).first()
 
         # Cursos disponibles activos
         context["cursos_disponibles"] = Curso.objects.filter(activo=True).count()
