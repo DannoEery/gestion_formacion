@@ -67,7 +67,8 @@ Dashboard Profesor
                 <ul>
                     {% for matricula in curso.matriculas.all %}
                     <li>
-                        {{ matricula.alumno.username }}
+                        {{ matricula.alumno.first_name }}
+                        {{ matricula.alumno.last_name }}
                     </li>
                     {% empty %}
                     <li>
